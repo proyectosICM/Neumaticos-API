@@ -1,0 +1,50 @@
+package com.icm.TireManagementApi;
+
+import com.icm.TireManagementApi.Models.CompanyModel;
+import com.icm.TireManagementApi.Models.RoleModel;
+import com.icm.TireManagementApi.Models.UserModel;
+import com.icm.TireManagementApi.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@SpringBootApplication
+public class TireManagementApiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(TireManagementApiApplication.class, args);
+	}
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	UserRepository userRepository;
+/*
+	@Bean
+	CommandLineRunner init(){
+		return args -> {
+			CompanyModel empresa = new CompanyModel();
+			empresa.setId(1L);
+
+			RoleModel rol = new RoleModel();
+			rol.setId(1L);
+
+			UserModel userModel = UserModel.builder()
+					.username("cond")
+					.password(passwordEncoder.encode("1234"))
+					.name("Eduardo1")
+					.lastname("Aguilar4")
+					.email("es123y1234@gmail.com")
+					.role(rol)
+					.company(empresa)
+					.build();
+
+			userRepository.save(userModel);
+
+		};
+	}
+*/
+}
