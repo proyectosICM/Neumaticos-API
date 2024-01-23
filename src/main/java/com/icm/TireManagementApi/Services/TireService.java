@@ -1,8 +1,12 @@
 package com.icm.TireManagementApi.Services;
 
 import com.icm.TireManagementApi.Models.TireModel;
+import com.icm.TireManagementApi.Models.VehicleModel;
 import com.icm.TireManagementApi.Repositories.TireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +38,37 @@ public class TireService {
      */
     public Optional<TireModel> getById(Long id) {
         return tireRepository.findById(id);
+    }
+
+    /**
+     * Retrieves a specific tire by its identification code.
+     *
+     * @param code The identification code of the tire to retrieve.
+     * @return Optional containing the TireModel if found, otherwise empty.
+     */
+    public Optional<TireModel> findByIdentificationCode(String code) {
+        return tireRepository.findByIdentificationCode(code);
+    }
+
+    /**
+     * Retrieves a list of tires associated with a specific vehicle.
+     *
+     * @param vehicle The vehicle for which to retrieve tires.
+     * @return List of TireModel objects associated with the specified vehicle.
+     */
+    public List<TireModel> findByVehicleModel(VehicleModel vehicle) {
+        return tireRepository.findByVehicleModel(vehicle);
+    }
+
+    /**
+     * Retrieves a list of tires associated with a specific vehicle using pagination.
+     *
+     * @param vehicle  The vehicle for which to retrieve tires.
+     * @param pageable The pageable information for pagination.
+     * @return Page of TireModel objects associated with the specified vehicle.
+     */
+    public Page<TireModel> findByVehicleModel(VehicleModel vehicle, Pageable pageable) {
+        return tireRepository.findByVehicleModel(vehicle, pageable);
     }
 
     /**

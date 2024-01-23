@@ -5,6 +5,8 @@ import com.icm.TireManagementApi.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,15 +23,22 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    /**
-     * Retrieves a list of all companies in the system.
-     *
-     * @return List of CompanyModel objects.
-     */
     @GetMapping
-    public List<CompanyModel> getAll() {
+    public List<CompanyModel> getAllCompanies() {
         return companyService.getAll();
     }
+
+    /**
+     * Retrieves a paginated list of all companies in the system.
+     *
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects.
+     */
+    @GetMapping("/page")
+    public Page<CompanyModel> getAllCompaniesPaginated(Pageable pageable) {
+        return companyService.getAll(pageable);
+    }
+
 
     /**
      * Retrieves a specific company by its ID.
@@ -43,6 +52,53 @@ public class CompanyController {
         return company.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    /**
+     * Retrieves a list of companies based on their status.
+     *
+     * @param active Boolean value indicating the status of the companies to retrieve.
+     * @return List of CompanyModel objects associated with the specified status.
+     */
+    @GetMapping("/status")
+    public List<CompanyModel> getCompaniesByStatus(@RequestParam Boolean active) {
+        return companyService.findByStatus(active);
+    }
+
+    /**
+     * Retrieves a paginated list of companies based on their status.
+     *
+     * @param active   Boolean value indicating the status of the companies to retrieve.
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects associated with the specified status.
+     */
+    @GetMapping("/status/page")
+    public Page<CompanyModel> getCompaniesByStatusPaginated(@RequestParam Boolean active, Pageable pageable) {
+        return companyService.findByStatus(active, pageable);
+    }
+
+    /**
+     * Retrieves a list of companies by their name.
+     *
+     * @param name The name of the company to retrieve.
+     * @return List of CompanyModel objects associated with the specified name.
+     */
+    @GetMapping("/name")
+    public List<CompanyModel> getCompaniesByName(@RequestParam String name) {
+        return companyService.findByName(name);
+    }
+
+    /**
+     * Retrieves a paginated list of companies by their name.
+     *
+     * @param name     The name of the company to retrieve.
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects associated with the specified name.
+     */
+    @GetMapping("/name/page")
+    public Page<CompanyModel> getCompaniesByNamePaginated(@RequestParam String name, Pageable pageable) {
+        return companyService.findByName(name, pageable);
+    }
+
 
     /**
      * Creates a new company record in the system.

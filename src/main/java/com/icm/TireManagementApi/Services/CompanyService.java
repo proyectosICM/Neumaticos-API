@@ -4,6 +4,9 @@ import com.icm.TireManagementApi.Models.CompanyModel;
 import com.icm.TireManagementApi.Repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,17 @@ public class CompanyService {
     }
 
     /**
+     * Retrieves a paginated list of all companies in the system.
+     *
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects.
+     */
+    public Page<CompanyModel> getAll(Pageable pageable) {
+        return companyRepository.findAll(pageable);
+    }
+
+
+    /**
      * Retrieves a specific company by its ID.
      *
      * @param id The ID of the company to retrieve.
@@ -34,6 +48,48 @@ public class CompanyService {
      */
     public Optional<CompanyModel> getById(Long id) {
         return companyRepository.findById(id);
+    }
+
+    /**
+     * Retrieves a list of companies based on their status.
+     *
+     * @param active Boolean value indicating the status of the companies to retrieve.
+     * @return List of CompanyModel objects associated with the specified status.
+     */
+    public List<CompanyModel> findByStatus(Boolean active) {
+        return companyRepository.findByStatus(active);
+    }
+
+    /**
+     * Retrieves a paginated list of companies based on their status.
+     *
+     * @param active   Boolean value indicating the status of the companies to retrieve.
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects associated with the specified status.
+     */
+    public Page<CompanyModel> findByStatus(Boolean active, Pageable pageable) {
+        return companyRepository.findByStatus(active, pageable);
+    }
+
+    /**
+     * Retrieves a list of companies by their name.
+     *
+     * @param name The name of the company to retrieve.
+     * @return List of CompanyModel objects associated with the specified name.
+     */
+    public List<CompanyModel> findByName(String name) {
+        return companyRepository.findByName(name);
+    }
+
+    /**
+     * Retrieves a paginated list of companies by their name.
+     *
+     * @param name     The name of the company to retrieve.
+     * @param pageable Pageable object for pagination.
+     * @return Page of CompanyModel objects associated with the specified name.
+     */
+    public Page<CompanyModel> findByName(String name, Pageable pageable) {
+        return companyRepository.findByName(name, pageable);
     }
 
     /**

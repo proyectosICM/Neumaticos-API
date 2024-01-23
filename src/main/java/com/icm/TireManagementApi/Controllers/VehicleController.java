@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,44 @@ public class VehicleController {
         Optional<VehicleModel> vehicle = vehicleService.getById(id);
         return vehicle.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Retrieves a page of vehicles associated with a specific company and in a given state.
+     *
+     * @param companyId The ID of the company for which to retrieve vehicles.
+     * @param status    The status of the vehicles to filter.
+     * @param page      The page number to retrieve (starting from 0).
+     * @param size      The size of each page.
+     * @return Page of VehicleModel objects associated with the specified company and matching the given status.
+     */
+    @GetMapping("/findByCompanyAndStatus")
+    public Page<VehicleModel> findByCompanyAndStatus(
+            @RequestParam Long companyId,
+            @RequestParam Boolean status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return vehicleService.findByCompanyAndStatus(companyId, status, page, size);
+    }
+
+    /**
+     * Retrieves a page of vehicles based on type, status, and company.
+     *
+     * @param typeId   The ID of the vehicle type.
+     * @param status   The status of the vehicles to filter.
+     * @param companyId The ID of the company for which to retrieve vehicles.
+     * @param page     The page number to retrieve (starting from 0).
+     * @param size     The size of each page.
+     * @return Page of VehicleModel objects based on the specified type, status, and company.
+     */
+    @GetMapping("/findByTypeAndStatusAndCompany")
+    public Page<VehicleModel> findByTypeAndStatusAndCompany(
+            @RequestParam Long typeId,
+            @RequestParam Boolean status,
+            @RequestParam Long companyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return vehicleService.findByTypeAndStatusAndCompany(typeId, status, companyId, page, size);
     }
 
     /**
