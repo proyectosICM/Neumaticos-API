@@ -23,10 +23,6 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @GetMapping
-    public List<CompanyModel> getAllCompanies() {
-        return companyService.getAll();
-    }
 
     /**
      * Retrieves a paginated list of all companies in the system.
@@ -59,10 +55,6 @@ public class CompanyController {
      * @param active Boolean value indicating the status of the companies to retrieve.
      * @return List of CompanyModel objects associated with the specified status.
      */
-    @GetMapping("/status")
-    public List<CompanyModel> getCompaniesByStatus(@RequestParam Boolean active) {
-        return companyService.findByStatus(active);
-    }
 
     /**
      * Retrieves a paginated list of companies based on their status.
@@ -74,17 +66,6 @@ public class CompanyController {
     @GetMapping("/status/page")
     public Page<CompanyModel> getCompaniesByStatusPaginated(@RequestParam Boolean active, Pageable pageable) {
         return companyService.findByStatus(active, pageable);
-    }
-
-    /**
-     * Retrieves a list of companies by their name.
-     *
-     * @param name The name of the company to retrieve.
-     * @return List of CompanyModel objects associated with the specified name.
-     */
-    @GetMapping("/name")
-    public List<CompanyModel> getCompaniesByName(@RequestParam String name) {
-        return companyService.findByName(name);
     }
 
     /**

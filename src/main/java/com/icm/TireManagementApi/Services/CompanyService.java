@@ -21,15 +21,6 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     /**
-     * Retrieves a list of all companies in the system.
-     *
-     * @return List of CompanyModel objects.
-     */
-    public List<CompanyModel> getAll() {
-        return companyRepository.findAll();
-    }
-
-    /**
      * Retrieves a paginated list of all companies in the system.
      *
      * @param pageable Pageable object for pagination.
@@ -39,7 +30,6 @@ public class CompanyService {
         return companyRepository.findAll(pageable);
     }
 
-
     /**
      * Retrieves a specific company by its ID.
      *
@@ -48,16 +38,6 @@ public class CompanyService {
      */
     public Optional<CompanyModel> getById(Long id) {
         return companyRepository.findById(id);
-    }
-
-    /**
-     * Retrieves a list of companies based on their status.
-     *
-     * @param active Boolean value indicating the status of the companies to retrieve.
-     * @return List of CompanyModel objects associated with the specified status.
-     */
-    public List<CompanyModel> findByStatus(Boolean active) {
-        return companyRepository.findByStatus(active);
     }
 
     /**
@@ -71,15 +51,6 @@ public class CompanyService {
         return companyRepository.findByStatus(active, pageable);
     }
 
-    /**
-     * Retrieves a list of companies by their name.
-     *
-     * @param name The name of the company to retrieve.
-     * @return List of CompanyModel objects associated with the specified name.
-     */
-    public List<CompanyModel> findByName(String name) {
-        return companyRepository.findByName(name);
-    }
 
     /**
      * Retrieves a paginated list of companies by their name.

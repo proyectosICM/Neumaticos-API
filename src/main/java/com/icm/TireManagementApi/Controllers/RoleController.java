@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +24,18 @@ public class RoleController {
     private RoleService roleService;
 
     /**
-     * Retrieves a list of all roles in the system.
+     * Retrieves a paginated list of all roles in the system.
      *
-     * @return List of RoleModel objects.
+     * @param page The page number to retrieve (starting from 0).
+     * @param size The size of each page.
+     * @return ResponseEntity with a Page of RoleModel objects.
      */
     @GetMapping
-    public List<RoleModel> getAllRoles() {
-        return roleService.getAll();
+    public ResponseEntity<Page<RoleModel>> getAllRoles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<RoleModel> roles = roleService.getAll(page, size);
+        return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
     /**

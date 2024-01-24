@@ -50,15 +50,6 @@ public class TireService {
         return tireRepository.findByIdentificationCode(code);
     }
 
-    /**
-     * Retrieves a list of tires associated with a specific vehicle.
-     *
-     * @param vehicle The vehicle for which to retrieve tires.
-     * @return List of TireModel objects associated with the specified vehicle.
-     */
-    public List<TireModel> findByVehicleModel(VehicleModel vehicle) {
-        return tireRepository.findByVehicleModel(vehicle);
-    }
 
     /**
      * Retrieves a list of tires associated with a specific vehicle using pagination.
@@ -67,8 +58,21 @@ public class TireService {
      * @param pageable The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle.
      */
-    public Page<TireModel> findByVehicleModel(VehicleModel vehicle, Pageable pageable) {
-        return tireRepository.findByVehicleModel(vehicle, pageable);
+    public Page<TireModel> findByVehicleModelId(Long vehicle, Pageable pageable) {
+        return tireRepository.findByVehicleModelId(vehicle, pageable);
+    }
+
+
+    /**
+     * Retrieves a paginated list of tires associated with a specific vehicle and status.
+     *
+     * @param vehicleId The ID of the vehicle for which to retrieve tires.
+     * @param status    The status of the tires to filter.
+     * @param pageable  The pageable information for pagination.
+     * @return Page of TireModel objects associated with the specified vehicle and status.
+     */
+    public Page<TireModel> findByVehicleModelIdAndStatus(Long vehicleId, Boolean status, Pageable pageable) {
+        return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
 
     /**

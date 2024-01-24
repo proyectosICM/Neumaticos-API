@@ -43,7 +43,7 @@ public class VehicleModel {
      */
     @ManyToOne
     @JoinColumn(name = "type", nullable = false)
-    private VehicleTypeModel vehicleTypeModel;
+    private VehicleTypeModel vehicleType;
 
     /**
      * The status of this vehicle (active/inactive).

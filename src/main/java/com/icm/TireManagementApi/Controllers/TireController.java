@@ -61,19 +61,6 @@ public class TireController {
     }
 
     /**
-     * Retrieves a list of tires associated with a specific vehicle.
-     *
-     * @param vehicleId The ID of the vehicle for which to retrieve tires.
-     * @return List of TireModel objects associated with the specified vehicle.
-     */
-    @GetMapping("/findByVehicle")
-    public List<TireModel> findByVehicle(@RequestParam Long vehicleId) {
-        VehicleModel vehicle = new VehicleModel();
-        vehicle.setId(vehicleId);
-        return tireService.findByVehicleModel(vehicle);
-    }
-
-    /**
      * Retrieves a list of tires associated with a specific vehicle using pagination.
      *
      * @param vehicleId The ID of the vehicle for which to retrieve tires.
@@ -86,10 +73,28 @@ public class TireController {
             @RequestParam Long vehicleId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        VehicleModel vehicle = new VehicleModel();
-        vehicle.setId(vehicleId);
         PageRequest pageable = PageRequest.of(page, size);
-        return tireService.findByVehicleModel(vehicle, pageable);
+        return tireService.findByVehicleModelId(vehicleId, pageable);
+    }
+
+    /**
+     * Retrieves a paginated list of tires associated with a specific vehicle and status.
+     *
+     * @param vehicleId The ID of the vehicle for which to retrieve tires.
+     * @param status    The status of the tires to filter.
+     * @param page      The page number to retrieve (starting from 0).
+     * @param size      The size of each page.
+     * @return ResponseEntity containing a Page of TireModel objects associated with the specified vehicle and status.
+     */
+    @GetMapping("/findByVehicleAndStatus")
+    public ResponseEntity<Page<TireModel>> findByVehicleModelIdAndStatus(
+            @RequestParam Long vehicleId,
+            @RequestParam Boolean status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<TireModel> tires = tireService.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 
     /**

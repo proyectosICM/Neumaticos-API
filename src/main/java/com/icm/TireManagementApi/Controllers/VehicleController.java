@@ -24,13 +24,18 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     /**
-     * Retrieves a list of all vehicles in the system.
+     * Retrieves a paginated list of all vehicles in the system.
      *
-     * @return List of VehicleModel objects.
+     * @param page The page number to retrieve (starting from 0).
+     * @param size The size of each page.
+     * @return ResponseEntity with a Page of VehicleModel objects.
      */
-    @GetMapping
-    public List<VehicleModel> getAll() {
-        return vehicleService.getAll();
+    @GetMapping("/page")
+    public ResponseEntity<Page<VehicleModel>> getAllVehicles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<VehicleModel> vehicles = vehicleService.getAll(page, size);
+        return new ResponseEntity<>(vehicles, HttpStatus.OK);
     }
 
     /**
@@ -56,12 +61,12 @@ public class VehicleController {
      * @return Page of VehicleModel objects associated with the specified company and matching the given status.
      */
     @GetMapping("/findByCompanyAndStatus")
-    public Page<VehicleModel> findByCompanyAndStatus(
+    public Page<VehicleModel> findByCompanyIdAndStatus(
             @RequestParam Long companyId,
             @RequestParam Boolean status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return vehicleService.findByCompanyAndStatus(companyId, status, page, size);
+        return vehicleService.findByCompanyIdAndStatus(companyId, status, page, size);
     }
 
     /**
@@ -81,8 +86,28 @@ public class VehicleController {
             @RequestParam Long companyId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return vehicleService.findByTypeAndStatusAndCompany(typeId, status, companyId, page, size);
+        return vehicleService.findByVehicleTypeIdAndStatusAndCompanyId(typeId, status, companyId, page, size);
     }
+
+    /**
+     * Retrieves a paginated list of vehicles based on type and company.
+     *
+     * @param vehicleTypeId The ID of the vehicle type.
+     * @param companyId     The ID of the company for which to retrieve vehicles.
+     * @param page          The page number to retrieve (starting from 0).
+     * @param size          The size of each page.
+     * @return Page of VehicleModel objects based on the specified type and company.
+     */
+    @GetMapping("/findByVehicleTypeAndCompany")
+    public ResponseEntity<Page<VehicleModel>> findByVehicleTypeIdAndCompanyId(
+            @RequestParam Long vehicleTypeId,
+            @RequestParam Long companyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<VehicleModel> vehicles = vehicleService.findByVehicleTypeIdAndCompanyId(vehicleTypeId, companyId, page, size);
+        return new ResponseEntity<>(vehicles, HttpStatus.OK);
+    }
+
 
     /**
      * Creates a new vehicle record in the system.

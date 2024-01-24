@@ -31,12 +31,15 @@ public class VehicleService {
     private VehicleTypeRepository vehicleTypeRepository;
 
     /**
-     * Retrieves a list of all vehicles in the system.
+     * Retrieves a paginated list of all vehicles in the system.
      *
-     * @return List of VehicleModel objects.
+     * @param page The page number to retrieve (starting from 0).
+     * @param size The size of each page.
+     * @return Page of VehicleModel objects.
      */
-    public List<VehicleModel> getAll() {
-        return vehicleRepository.findAll();
+    public Page<VehicleModel> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return vehicleRepository.findAll(pageable);
     }
 
     /**
@@ -58,14 +61,11 @@ public class VehicleService {
      * @param size      The size of each page.
      * @return Page of VehicleModel objects associated with the specified company and matching the given status.
      */
-    public Page<VehicleModel> findByCompanyAndStatus(Long companyId, Boolean status, int page, int size) {
-        Optional<CompanyModel> company = companyRepository.findById(companyId);
-
-        if (company.isPresent()) {
+    public Page<VehicleModel> findByCompanyIdAndStatus(Long companyId, Boolean status, int page, int size) {
+        if (companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByCompanyAndStatus(company.get(), status, pageable);
+            return vehicleRepository.findByCompanyIdAndStatus(companyId, status, pageable);
         } else {
-            // Manejar el caso en que la empresa no se encuentra
             return Page.empty();
         }
     }
@@ -80,19 +80,34 @@ public class VehicleService {
      * @param size     The size of each page.
      * @return Page of VehicleModel objects based on the specified type, status, and company.
      */
-    public Page<VehicleModel> findByTypeAndStatusAndCompany(
+    public Page<VehicleModel> findByVehicleTypeIdAndStatusAndCompanyId(
             Long typeId, Boolean status, Long companyId, int page, int size) {
-        Optional<VehicleTypeModel> vehicleType = vehicleTypeRepository.findById(typeId);
-        Optional<CompanyModel> company = companyRepository.findById(companyId);
-
-        if (vehicleType.isPresent() && company.isPresent()) {
+        if (typeId != null && companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByVehicleTypeModelAndStatusAndCompany(vehicleType.get(), status, company.get(), pageable);
+            return vehicleRepository.findByVehicleTypeIdAndStatusAndCompanyId(typeId, status, companyId, pageable);
         } else {
-            // Manejar el caso en que el tipo de vehículo o la empresa no se encuentran
             return Page.empty();
         }
     }
+
+    /**
+     * Retrieves a paginated list of vehicles based on type and company.
+     *
+     * @param vehicleTypeId The ID of the vehicle type.
+     * @param companyId     The ID of the company for which to retrieve vehicles.
+     * @param page          The page number to retrieve (starting from 0).
+     * @param size          The size of each page.
+     * @return Page of VehicleModel objects based on the specified type and company.
+     */
+    public Page<VehicleModel> findByVehicleTypeIdAndCompanyId(Long vehicleTypeId, Long companyId, int page, int size) {
+        if (vehicleTypeId != null && companyId != null) {
+            Pageable pageable = PageRequest.of(page, size);
+            return vehicleRepository.findByVehicleTypeIdAndCompanyId(vehicleTypeId, companyId, pageable);
+        } else {
+            return Page.empty();
+        }
+    }
+
 
     /**
      * Creates a new vehicle record in the system.

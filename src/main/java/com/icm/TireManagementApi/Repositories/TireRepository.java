@@ -26,30 +26,14 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
     Optional<TireModel> findByIdentificationCode(String code);
 
     /**
-     * Finds all tires associated with a specific vehicle.
-     *
-     * @param vehicle The vehicle for which to retrieve tires.
-     * @return List of TireModel objects associated with the specified vehicle.
-     */
-    List<TireModel> findByVehicleModel(VehicleModel vehicle);
-
-    /**
      * Finds all tires associated with a specific vehicle using pagination.
      *
      * @param vehicle  The vehicle for which to retrieve tires.
      * @param pageable The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle.
      */
-    Page<TireModel> findByVehicleModel(VehicleModel vehicle, Pageable pageable);
+    Page<TireModel> findByVehicleModelId(Long vehicle, Pageable pageable);
 
-    /**
-     * Finds all tires associated with a specific vehicle and status.
-     *
-     * @param vehicle The vehicle for which to retrieve tires.
-     * @param status  The status of the tires to retrieve.
-     * @return List of TireModel objects associated with the specified vehicle and status.
-     */
-    List<TireModel> findByVehicleModelAndStatus(VehicleModel vehicle, Boolean status);
 
     /**
      * Finds all tires associated with a specific vehicle and status using pagination.
@@ -59,5 +43,5 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param pageable The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle and status.
      */
-    Page<TireModel> findByVehicleModelAndStatus(VehicleModel vehicle, Boolean status, Pageable pageable);
+    Page<TireModel> findByVehicleModelIdAndStatus(Long vehicle, Boolean status, Pageable pageable);
 }

@@ -75,4 +75,6 @@ public class UserModel {
     @JoinColumn(name = "company", nullable = false)
     private CompanyModel company;
 
+    private Boolean status;
+
 }
