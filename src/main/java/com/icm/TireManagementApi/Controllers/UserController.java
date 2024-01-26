@@ -61,6 +61,20 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Retrieves user information based on the username.
+     *
+     * @param username The username of the user to retrieve.
+     * @return ResponseEntity containing the UserModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
+     */
+    @GetMapping("/info/{username}")
+    public ResponseEntity<UserModel> findUserByUsername(@PathVariable("username") String username){
+        Optional<UserModel> user = userService.findUserByUsername(username);
+
+        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 
     /**
      * Retrieves a list of users based on their role.

@@ -44,6 +44,16 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    /**
+     * Retrieves user information by searching for the user with the given username.
+     *
+     * @param username The username of the user to retrieve.
+     * @return Optional containing the UserModel if found, otherwise empty.
+     */
+    public Optional<UserModel> findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 
     /**
      * Retrieves a paginated list of users based on their role.
