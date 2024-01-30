@@ -10,6 +10,15 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
     /**
+     * Retrieves a paginated list of vehicles associated with a specific company.
+     *
+     * @param companyId The ID of the company for which to retrieve vehicles.
+     * @param pageable  The pageable information for pagination.
+     * @return Page of VehicleModel objects associated with the specified company and matching the given status.
+     */
+    Page<VehicleModel> findByCompanyId(Long companyId, Pageable pageable);
+
+    /**
      * Retrieves a paginated list of vehicles associated with a specific company and status.
      *
      * @param companyId The ID of the company for which to retrieve vehicles.

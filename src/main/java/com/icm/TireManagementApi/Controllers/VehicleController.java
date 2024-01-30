@@ -52,6 +52,22 @@ public class VehicleController {
     }
 
     /**
+     * Retrieves a page of vehicles associated with a specific company.
+     *
+     * @param companyId The ID of the company for which to retrieve vehicles.
+     * @param page      The page number to retrieve (starting from 0).
+     * @param size      The size of each page.
+     * @return Page of VehicleModel objects associated with the specified company and matching the given status.
+     */
+    @GetMapping("/findByCompany")
+    public Page<VehicleModel> findByCompanyId(
+            @RequestParam Long companyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        return vehicleService.findByCompanyId(companyId, page, size);
+    }
+
+    /**
      * Retrieves a page of vehicles associated with a specific company and in a given state.
      *
      * @param companyId The ID of the company for which to retrieve vehicles.

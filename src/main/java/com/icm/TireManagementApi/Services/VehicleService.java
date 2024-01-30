@@ -38,8 +38,14 @@ public class VehicleService {
      * @return Page of VehicleModel objects.
      */
     public Page<VehicleModel> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return vehicleRepository.findAll(pageable);
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return vehicleRepository.findAll(pageable);
+        } catch (Exception e) {
+            // Log or handle the exception appropriately
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving vehicles", e);
+        }
     }
 
     /**
@@ -50,6 +56,22 @@ public class VehicleService {
      */
     public Optional<VehicleModel> getById(Long id) {
         return vehicleRepository.findById(id);
+    }
+    /**
+     * Retrieves a page of vehicles associated with a specific company.
+     *
+     * @param companyId The ID of the company for which to retrieve vehicles.
+     * @param page      The page number to retrieve (starting from 0).
+     * @param size      The size of each page.
+     * @return Page of VehicleModel objects associated with the specified company and matching the given status.
+     */
+    public Page<VehicleModel> findByCompanyId(Long companyId, int page, int size) {
+        if (companyId != null) {
+            Pageable pageable = PageRequest.of(page, size);
+            return vehicleRepository.findByCompanyId(companyId, pageable);
+        } else {
+            return Page.empty();
+        }
     }
 
     /**
