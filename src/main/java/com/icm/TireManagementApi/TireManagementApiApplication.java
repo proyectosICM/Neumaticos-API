@@ -28,7 +28,7 @@ public class TireManagementApiApplication {
 
 	@Autowired
 	UserRepository userRepository;
-	/*
+/*
 	@Bean
 	CommandLineRunner init(){
 		return args -> {
@@ -36,20 +36,18 @@ public class TireManagementApiApplication {
 			empresa.setId(1L);
 
 			RoleModel rol = new RoleModel();
-			rol.setId(1L);
+			rol.setId(4L);
 
 			UserModel userModel = UserModel.builder()
-					.username("cond")
+					.username("sa")
 					.password(passwordEncoder.encode("1234"))
-					.name("Eduardo1")
-					.lastname("Aguilar4")
-					.email("es123y1234@gmail.com")
+					.name("Eduardo")
+					.lastname("Antahurco")
+					.email("eluis3@gmail.com")
 					.role(rol)
 					.company(empresa)
 					.build();
-
 			userRepository.save(userModel);
-
 		};
 	}
 */
