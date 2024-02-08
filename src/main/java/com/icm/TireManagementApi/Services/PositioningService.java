@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class PositioningService {
-@Autowired
-    private  PositioningRepository positioningRepository;
+    @Autowired
+    private PositioningRepository positioningRepository;
 
     @Autowired
     public PositioningService(PositioningRepository positioningRepository) {
@@ -20,6 +20,16 @@ public class PositioningService {
 
     public List<PositioningModel> findAllPositionings() {
         return positioningRepository.findAll();
+    }
+
+    /**
+     * Retrieves all tire positions associated with a specific vehicle type.
+     *
+     * @param vehicleTypeId The ID of the vehicle type for which to retrieve tire positions.
+     * @return A list of PositioningModel objects.
+     */
+    public List<PositioningModel> findPositioningsByVehicleTypeId(Long vehicleTypeId) {
+        return positioningRepository.findByVehicleTypeId(vehicleTypeId);
     }
 
     public Optional<PositioningModel> findPositioningById(Long id) {

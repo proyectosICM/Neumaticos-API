@@ -10,15 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/positioning")
+@RequestMapping("api/positioning")
 public class PositioningController {
 
-    private final PositioningService positioningService;
-
     @Autowired
-    public PositioningController(PositioningService positioningService) {
-        this.positioningService = positioningService;
-    }
+    private  PositioningService positioningService;
 
     @GetMapping
     public ResponseEntity<List<PositioningModel>> getAllPositionings() {
@@ -31,6 +27,21 @@ public class PositioningController {
         return positioningService.findPositioningById(id)
                 .map(positioning -> new ResponseEntity<>(positioning, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * Endpoint to retrieve tire positions by vehicle type ID.
+     *
+     * @param vehicleTypeId The ID of the vehicle type.
+     * @return ResponseEntity containing a list of PositioningModel objects.
+     */
+    @GetMapping("/vehicleType/{vehicleTypeId}")
+    public ResponseEntity<List<PositioningModel>> getPositioningsByVehicleTypeId(@PathVariable Long vehicleTypeId) {
+        List<PositioningModel> positionings = positioningService.findPositioningsByVehicleTypeId(vehicleTypeId);
+        if (positionings.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(positionings);
     }
 
     @PostMapping

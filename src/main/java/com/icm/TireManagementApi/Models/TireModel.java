@@ -55,13 +55,23 @@ public class TireModel {
     private VehicleModel vehicleModel;
 
     /**
+     * The company to which this vehicle belongs.
+     */
+    @ManyToOne
+    @JoinColumn(name = "company", nullable = false)
+    private CompanyModel company;
+
+    /**
      * Status of the tire (active/inactive).
      */
     private Boolean status;
 
     /**
      * The position of the tire on the vehicle, 0 for spare
+     *
      */
+    @ManyToOne
+    @JoinColumn(name = "positioning", nullable = true)
     private PositioningModel positioning;
 
     /**

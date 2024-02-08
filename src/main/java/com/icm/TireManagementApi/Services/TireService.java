@@ -50,6 +50,17 @@ public class TireService {
         return tireRepository.findByIdentificationCode(code);
     }
 
+    /**
+     * Retrieves a list of all tires associated with a specific vehicle.
+     * This method is designed to fetch a comprehensive list without pagination,
+     * suitable for scenarios where the complete set of associated tires is required.
+     *
+     * @param vehicleId The ID of the vehicle for which to retrieve the associated tires.
+     * @return List of TireModel objects associated with the specified vehicle ID.
+     */
+    public List<TireModel> findTiresByVehicleId(Long vehicleId) {
+        return tireRepository.findByVehicleModelId(vehicleId);
+    }
 
     /**
      * Retrieves a list of tires associated with a specific vehicle using pagination.
@@ -62,6 +73,16 @@ public class TireService {
         return tireRepository.findByVehicleModelId(vehicle, pageable);
     }
 
+    /**
+     * Finds all tires related to a specific vehicle and positioned at a specified location code.
+     * Useful for retrieving tires based on their physical location on a vehicle.
+     * @param vehicle The ID of the vehicle for which to find tires.
+     * @param positioning The positioning code of the tire on the vehicle.
+     * @return A list of TireModel objects associated with the given vehicle and positioning code.
+     */
+    public List<TireModel> findTiresByVehicleAndPositioning(Long vehicle, String positioning) {
+        return tireRepository.findByVehicleModelIdAndPositioningLocationCode(vehicle, positioning);
+    }
 
     /**
      * Retrieves a paginated list of tires associated with a specific vehicle and status.
@@ -74,6 +95,8 @@ public class TireService {
     public Page<TireModel> findByVehicleModelIdAndStatus(Long vehicleId, Boolean status, Pageable pageable) {
         return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
+
+
 
     /**
      * Creates a new tire record in the system.

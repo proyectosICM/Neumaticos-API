@@ -61,6 +61,23 @@ public class TireController {
     }
 
     /**
+     * Retrieves a list of all tires associated with a specific vehicle.
+     * This method is designed to fetch a comprehensive list without pagination,
+     * suitable for scenarios where the complete set of associated tires is required.
+     *
+     * @param vehicleId The ID of the vehicle for which to retrieve the associated tires.
+     * @return ResponseEntity containing the list of TireModel objects associated with the specified vehicle ID.
+     */
+    @GetMapping("vehicle/{vehicleId}")
+    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@PathVariable Long vehicleId) {
+        List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId);
+        if(tires.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
+    /**
      * Retrieves a list of tires associated with a specific vehicle using pagination.
      *
      * @param vehicleId The ID of the vehicle for which to retrieve tires.
@@ -96,6 +113,24 @@ public class TireController {
         Page<TireModel> tires = tireService.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
+
+    /**
+     * Endpoint to find all tires related to a specific vehicle and positioned at a specified location code.
+     * @param vehicleId The ID of the vehicle for which to find tires.
+     * @param positioningCode The positioning code of the tire on the vehicle.
+     * @return ResponseEntity with a list of TireModel objects associated with the given vehicle and positioning code.
+     */
+    @GetMapping("/byVehicleAndPositioning")
+    public ResponseEntity<List<TireModel>> findTiresByVehicleAndPositioning(
+            @RequestParam Long vehicleId,
+            @RequestParam String positioningCode) {
+        List<TireModel> tires = tireService.findTiresByVehicleAndPositioning(vehicleId, positioningCode);
+        if (tires.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
 
     /**
      * Creates a new tire record in the system.

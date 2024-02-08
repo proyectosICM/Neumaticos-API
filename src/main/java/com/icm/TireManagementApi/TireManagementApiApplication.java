@@ -23,12 +23,13 @@ public class TireManagementApiApplication {
 		// Llama a subscribeToTopic en la instancia
 		mqttSubscriber.subscribeToTopic("prueba");
 	}
+	/*
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
 	UserRepository userRepository;
-/*
+
 	@Bean
 	CommandLineRunner init(){
 		return args -> {
