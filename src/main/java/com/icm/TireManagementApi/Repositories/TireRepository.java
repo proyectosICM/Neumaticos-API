@@ -44,4 +44,6 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @return Page of TireModel objects associated with the specified vehicle and status.
      */
     Page<TireModel> findByVehicleModelIdAndStatus(Long vehicle, Boolean status, Pageable pageable);
+
+    List<TireModel> findByVehicleModelIdAndPositioning(Long vehicle, Long positioning );
 }

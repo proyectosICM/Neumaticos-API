@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -37,5 +38,12 @@ public class VehicleTypeModel {
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
+
+    /**
+     * Date and time when this vehicle was last updated.
+     */
+    @Column(name = "updatedAt")
+    @UpdateTimestamp
+    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
 }

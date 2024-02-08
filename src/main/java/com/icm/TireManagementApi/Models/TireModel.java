@@ -60,6 +60,11 @@ public class TireModel {
     private Boolean status;
 
     /**
+     * The position of the tire on the vehicle, 0 for spare
+     */
+    private PositioningModel positioning;
+
+    /**
      * Date and time this user was created.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
