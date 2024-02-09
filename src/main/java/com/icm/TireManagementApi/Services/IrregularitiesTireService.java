@@ -33,12 +33,15 @@ public class IrregularitiesTireService {
 
     /**
      * Retrieves a paginated list of all tire irregularities associated with a specific company.
+     * This method creates a Pageable object based on the page number and page size parameters to control pagination.
      *
-     * @param companyId The ID of the company.
-     * @param pageable  The pageable information for pagination.
-     * @return Page of IrregularitiesTireModel objects.
+     * @param companyId The ID of the company for which to retrieve irregularities.
+     * @param page The page number of the requested page.
+     * @param size The size of the requested page.
+     * @return A Page of IrregularitiesTireModel objects for the specified company.
      */
-    public Page<IrregularitiesTireModel> findIrregularitiesByCompanyId(Long companyId, Pageable pageable) {
+    public Page<IrregularitiesTireModel> findIrregularitiesByCompanyId(Long companyId, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
         return irregularitiesTireRepository.findByCompanyId(companyId, pageable);
     }
 
@@ -54,9 +57,17 @@ public class IrregularitiesTireService {
         return irregularitiesTireRepository.findByCompanyIdAndVehicleModelId(companyId, vehicleId, pageable);
     }
 
-    public Page<IrregularitiesTireModel> findRecentIrregularities() {
+    /**
+     * Retrieves the latest 6 irregularities for a specific vehicle model.
+     * This method uses Spring Data JPA's method naming conventions to automatically generate the query,
+     * limiting the results to the top 6 most recent entries based on the 'createdAt' timestamp.
+     *
+     * @param vehicleModelId The ID of the vehicle model for which to retrieve irregularities.
+     * @return A page of IrregularitiesTireModel containing the latest 6 irregularities for the specified vehicle model.
+     */
+    public Page<IrregularitiesTireModel> findRecentIrregularitiesByVehicleModelId(Long vehicleModelId) {
         Pageable topSix = PageRequest.of(0, 6, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return irregularitiesTireRepository.findTop6ByOrderByCreatedAtDesc(topSix);
+        return irregularitiesTireRepository.findByVehicleModelIdOrderByCreatedAtDesc(vehicleModelId, topSix);
     }
 
     /**

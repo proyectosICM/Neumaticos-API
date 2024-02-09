@@ -3,6 +3,7 @@ package com.icm.TireManagementApi.Controllers;
 import com.icm.TireManagementApi.Models.IrregularitiesTireModel;
 import com.icm.TireManagementApi.Services.IrregularitiesTireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
@@ -24,10 +25,12 @@ public class IrregularitiesTireController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    @GetMapping("/company/{companyId}/page")
-    public ResponseEntity<Page<IrregularitiesTireModel>> getIrregularitiesByCompanyId(@PathVariable Long companyId, Pageable pageable) {
-        Page<IrregularitiesTireModel> page = irregularitiesTireService.findIrregularitiesByCompanyId(companyId, pageable);
-        return new ResponseEntity<>(page, HttpStatus.OK);
+    @GetMapping("/company/page/{companyId}")
+    public ResponseEntity<Page<IrregularitiesTireModel>> getIrregularitiesByCompanyId(@PathVariable Long companyId,
+                                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                                      @RequestParam(defaultValue = "6") int size) {
+        Page<IrregularitiesTireModel> data = irregularitiesTireService.findIrregularitiesByCompanyId(companyId, page, size);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("/company/{companyId}/vehicle/{vehicleId}/page")
@@ -37,15 +40,10 @@ public class IrregularitiesTireController {
     }
 
 
-    /**
-     * Endpoint to retrieve the 6 most recent tire irregularity records.
-     *
-     * @return ResponseEntity with a Page of IrregularitiesTireModel containing the 6 most recent records.
-     */
-    @GetMapping("/recent")
-    public ResponseEntity<Page<IrregularitiesTireModel>> getRecentIrregularities() {
-        Page<IrregularitiesTireModel> recentIrregularities = irregularitiesTireService.findRecentIrregularities();
-        return new ResponseEntity<>(recentIrregularities, HttpStatus.OK);
+    @GetMapping("/recent/{vehicleModelId}")
+    public ResponseEntity<Page<IrregularitiesTireModel>> getRecentIrregularitiesByVehicleModelId(@PathVariable Long vehicleModelId) {
+        Page<IrregularitiesTireModel> page = irregularitiesTireService.findRecentIrregularitiesByVehicleModelId(vehicleModelId);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")

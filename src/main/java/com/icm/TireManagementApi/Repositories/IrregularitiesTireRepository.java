@@ -29,12 +29,12 @@ public interface IrregularitiesTireRepository extends JpaRepository<Irregulariti
     Page<IrregularitiesTireModel> findByCompanyIdAndVehicleModelId(Long companyId, Long vehicleId, Pageable pageable);
 
     /**
-     * Finds the 6 most recent tire irregularity records.
-     * Utilizes Spring Data JPA pagination to limit results to the top 6 entries when sorted by creation timestamp in descending order.
+     * Retrieves the 6 most recent irregularities for a specific vehicle model.
+     * This method utilizes Spring Data JPA pagination to fetch the top 6 entries sorted by creation timestamp in descending order, ensuring only the most recent records are returned for the given vehicle model.
      *
-     * @param pageable Pageable object to limit results to the top 6 entries. Should be configured with a page size of 6 and sort direction DESC on 'createdAt'.
-     * @return Page of IrregularitiesTireModel containing the 6 most recent records.
+     * @param vehicleModelId The ID of the vehicle model for which to retrieve the irregularities.
+     * @param pageable       A Pageable object to limit results to the top 6 entries. It should be configured with a page size of 6 and sort direction DESC on 'createdAt'.
+     * @return A page of IrregularitiesTireModel containing the 6 most recent records for the specified vehicle model.
      */
-    @Query("SELECT i FROM IrregularitiesTireModel i ORDER BY i.createdAt DESC")
-    Page<IrregularitiesTireModel> findTop6ByOrderByCreatedAtDesc(Pageable pageable);
+    Page<IrregularitiesTireModel> findByVehicleModelIdOrderByCreatedAtDesc(Long vehicleModelId, Pageable pageable);
 }
