@@ -51,6 +51,18 @@ public class VehicleModel {
     private Boolean status;
 
     /**
+     * The standard or reference temperature for the vehicle's tires.
+     * This value represents the optimal temperature under normal operating conditions.
+     */
+    private Double standardTemperature;
+
+    /**
+     * The standard or reference pressure for the vehicle's tires.
+     * This value signifies the optimal tire pressure for maintaining vehicle performance and safety.
+     */
+    private Double standardPressure;
+
+    /**
      * Date and time when this vehicle was created.
      */
     @Column(name = "createdat", nullable = false, updatable = false)

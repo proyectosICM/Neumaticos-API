@@ -2,6 +2,7 @@ package com.icm.TireManagementApi.Controllers;
 
 import com.icm.TireManagementApi.Models.TireModel;
 import com.icm.TireManagementApi.Models.VehicleModel;
+import com.icm.TireManagementApi.Requests.UpdateTirePropertiesRequest;
 import com.icm.TireManagementApi.Services.TireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -170,4 +171,25 @@ public class TireController {
         tireService.deleteTire(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PutMapping("/updateProperties")
+    public ResponseEntity<TireModel> updateTireProperties(@RequestBody UpdateTirePropertiesRequest request) {
+        try {
+            TireModel updatedTire = tireService.updateProperties(
+                    request.getTemperature(),
+                    request.getPressure(),
+                    request.getBattery(),
+                    request.getIdvehicle(),
+                    request.getIdtire()
+            );
+            return ResponseEntity.ok(updatedTire);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/hola")
+    public String hola() {
+     return "hola";
+    }
+
 }

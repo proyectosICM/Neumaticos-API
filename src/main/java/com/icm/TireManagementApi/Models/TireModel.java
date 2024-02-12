@@ -75,6 +75,13 @@ public class TireModel {
     private PositioningModel positioning;
 
     /**
+     * A flag to indicate whether an alert has been generated for this tire.
+     * This is used to prevent redundant alerts for the same condition until the issue is resolved.
+     * True indicates that an alert has already been issued, whereas false indicates no current alert.
+     */
+    private Boolean alerted;
+
+    /**
      * Date and time this user was created.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
