@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Optional;
  * This service provides methods to retrieve, create, update, and delete user records in the system.
  */
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 public class UserController {
 
     @Autowired
@@ -31,7 +32,19 @@ public class UserController {
     private CompanyService companyService;
 
     /**
-     * Retrieves a paginated list of all users in the system.
+     * Fetches a list of all users in the system.
+     *
+     * @return ResponseEntity with a Page of UserModel objects.
+     */
+    @GetMapping()
+    public ResponseEntity<List<UserModel>> getAllUsers() {
+        List<UserModel> users = userService.getAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
+    /**
+     * Fetches a paginated list of all users in the system.
      *
      * @param page The page number to retrieve (starting from 0).
      * @param size The size of each page.
@@ -59,7 +72,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves user information based on the username.
+     * Fetches user information based on the username.
      *
      * @param username The username of the user to retrieve.
      * @return ResponseEntity containing the UserModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
@@ -72,21 +85,18 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     /**
-     * Retrieves a list of users based on their role.
+     * Fetches a list of users based on their role.
      *
      * @param roleId   The ID of the role for which to retrieve users.
-     * @param pageable The pageable information for pagination.
      * @return ResponseEntity containing the Page of UserModel objects and HttpStatus.OK.
      */
-    @GetMapping("/role/{roleId}")
-    public ResponseEntity<Page<UserModel>> getUsersByRole(
-            @PathVariable Long roleId,
-            Pageable pageable) {
+    @GetMapping("/role")
+    public ResponseEntity<List<UserModel>> getUsersByRole(
+            @RequestParam Long roleId) {
 
         if (roleId != null) {
-            Page<UserModel> users = userService.findByRoleId(roleId, pageable);
+            List<UserModel> users = userService.findByRoleId(roleId);
             return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             return ResponseEntity.notFound().build();
@@ -94,17 +104,39 @@ public class UserController {
     }
 
     /**
-     * Retrieves a list of users based on their role and status.
+     * Fetches a paginated list of users based on their role.
+     *
+     * @param roleId   The ID of the role for which to retrieve users.
+     * @param page The page number to retrieve (starting from 0).
+     * @param size The size of each page.
+     * @return ResponseEntity containing the Page of UserModel objects and HttpStatus.OK.
+     */
+    @GetMapping("/role/page")
+    public ResponseEntity<Page<UserModel>> getUsersByRole(
+            @RequestParam Long roleId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        if (roleId != null) {
+            Page<UserModel> users = userService.findByRoleId(roleId, page, size);
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Fetches a list of users based on their role and status.
      *
      * @param roleId   The ID of the role for which to retrieve users.
      * @param status   The status of the users to retrieve.
      * @param pageable The pageable information for pagination.
      * @return ResponseEntity containing the Page of UserModel objects and HttpStatus.OK.
      */
-    @GetMapping("/role/{roleId}/status/{status}")
+    @GetMapping("/roleAndStatus")
     public ResponseEntity<Page<UserModel>> getUsersByRoleAndStatus(
-            @PathVariable Long roleId,
-            @PathVariable Boolean status,
+            @RequestParam Long roleId,
+            @RequestParam Boolean status,
             Pageable pageable) {
 
         if (roleId != null) {
@@ -116,17 +148,17 @@ public class UserController {
     }
 
     /**
-     * Retrieves a list of users based on their role and company.
+     * Fetches a list of users based on their role and company.
      *
      * @param roleId   The ID of the role for which to retrieve users.
      * @param companyId The ID of the company for which to retrieve users.
      * @param pageable The pageable information for pagination.
      * @return ResponseEntity containing the Page of UserModel objects and HttpStatus.OK.
      */
-    @GetMapping("/role/{roleId}/company/{companyId}")
+    @GetMapping("/roleAndCompany")
     public ResponseEntity<Page<UserModel>> getUsersByRoleAndCompany(
-            @PathVariable Long roleId,
-            @PathVariable Long companyId,
+            @RequestParam Long roleId,
+            @RequestParam Long companyId,
             Pageable pageable) {
         if (roleId != null && companyId != null) {
             Page<UserModel> users = userService.findByRoleIdAndCompanyId(roleId, companyId, pageable);
@@ -137,7 +169,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves a list of users based on their role, company, and status.
+     * Fetches a list of users based on their role, company, and status.
      *
      * @param roleId   The ID of the role for which to retrieve users.
      * @param companyId The ID of the company for which to retrieve users.
@@ -145,11 +177,11 @@ public class UserController {
      * @param pageable The pageable information for pagination.
      * @return ResponseEntity containing the Page of UserModel objects and HttpStatus.OK.
      */
-    @GetMapping("/role/{roleId}/company/{companyId}/status/{status}")
+    @GetMapping("/roleCompanyStatus")
     public ResponseEntity<Page<UserModel>> getUsersByRoleAndCompanyAndStatus(
-            @PathVariable Long roleId,
-            @PathVariable Long companyId,
-            @PathVariable Boolean status,
+            @RequestParam Long roleId,
+            @RequestParam Long companyId,
+            @RequestParam Boolean status,
             Pageable pageable) {
 
         if (roleId != null && companyId != null) {
@@ -161,14 +193,14 @@ public class UserController {
     }
 
     /**
-     * Retrieves a paginated list of users based on their company.
+     * Fetches a paginated list of users based on their company.
      *
      * @param companyId The ID of the company for which to retrieve users.
      * @param pageable  The pageable information for pagination.
      * @return Page of UserModel objects associated with the specified company.
      */
-    @GetMapping("/company/{companyId}")
-    public Page<UserModel> getUsersByCompany(@PathVariable Long companyId, Pageable pageable) {
+    @GetMapping("/company")
+    public Page<UserModel> getUsersByCompany(@RequestParam Long companyId, Pageable pageable) {
         if (companyId != null) {
             return userService.findByCompanyId(companyId, pageable);
         } else {
@@ -178,15 +210,15 @@ public class UserController {
     }
 
     /**
-     * Retrieves a paginated list of users based on their company and status.
+     * Fetches a paginated list of users based on their company and status.
      *
      * @param companyId The ID of the company for which to retrieve users.
      * @param status    The status of the users to retrieve.
      * @param pageable  The pageable information for pagination.
      * @return Page of UserModel objects associated with the specified company and status.
      */
-    @GetMapping("/company/{companyId}/status/{status}")
-    public Page<UserModel> getUsersByCompanyAndStatus(@PathVariable Long companyId, @PathVariable Boolean status, Pageable pageable) {
+    @GetMapping("/companyAndStatus/")
+    public Page<UserModel> getUsersByCompanyAndStatus(@RequestParam Long companyId, @RequestParam Boolean status, Pageable pageable) {
         // Assuming you have a method in CompanyService to get a CompanyModel by ID
         if (companyId != null) {
             return userService.findByCompanyIdAndStatus(companyId, status, pageable);

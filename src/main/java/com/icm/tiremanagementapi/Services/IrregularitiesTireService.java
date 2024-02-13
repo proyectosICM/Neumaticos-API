@@ -50,10 +50,12 @@ public class IrregularitiesTireService {
      *
      * @param companyId The ID of the company.
      * @param vehicleId The ID of the vehicle.
-     * @param pageable  The pageable information for pagination.
+     * @param page The page number to retrieve.
+     * @param size The size of the page.
      * @return Page of IrregularitiesTireModel objects.
      */
-    public Page<IrregularitiesTireModel> findIrregularitiesByCompanyIdAndVehicleId(Long companyId, Long vehicleId, Pageable pageable) {
+    public Page<IrregularitiesTireModel> findIrregularitiesByCompanyIdAndVehicleId(Long companyId, Long vehicleId, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
         return irregularitiesTireRepository.findByCompanyIdAndVehicleModelId(companyId, vehicleId, pageable);
     }
 

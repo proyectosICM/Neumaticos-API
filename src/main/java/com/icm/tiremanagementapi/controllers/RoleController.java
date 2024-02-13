@@ -8,11 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller class to manage operations related to Role entities.
- * This service provides methods to retrieve, create, update, and delete role records in the system.
+ * Handles HTTP requests related to roles in the system.
+ * Supports operations such as listing, retrieving, creating, updating, and deleting companies.
  */
 @RestController
 @RequestMapping("api/role")
@@ -22,22 +23,18 @@ public class RoleController {
     private RoleService roleService;
 
     /**
-     * Retrieves a paginated list of all roles in the system.
+     * Fetches a  list of all roles in the system.
      *
-     * @param page The page number to retrieve (starting from 0).
-     * @param size The size of each page.
      * @return ResponseEntity with a Page of RoleModel objects.
      */
     @GetMapping
-    public ResponseEntity<Page<RoleModel>> getAllRoles(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<RoleModel> roles = roleService.getAll(page, size);
+    public ResponseEntity<List<RoleModel>> getAllRoles() {
+        List<RoleModel> roles = roleService.getAll();
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
     /**
-     * Retrieves a specific role by its ID.
+     * Fetches a specific role by its ID.
      *
      * @param id The ID of the role to retrieve.
      * @return ResponseEntity containing the RoleModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.

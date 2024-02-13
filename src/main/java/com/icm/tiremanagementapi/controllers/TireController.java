@@ -53,8 +53,8 @@ public class TireController {
      * @param code The identification code of the tire to retrieve.
      * @return ResponseEntity containing the TireModel if found, otherwise returns 404 Not Found.
      */
-    @GetMapping("/code/{code}")
-    public ResponseEntity<TireModel> getTireByIdentificationCode(@PathVariable String code) {
+    @GetMapping("/code")
+    public ResponseEntity<TireModel> getTireByIdentificationCode(@RequestParam String code) {
         Optional<TireModel> tire = tireService.findByIdentificationCode(code);
         return tire.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -68,8 +68,8 @@ public class TireController {
      * @param vehicleId The ID of the vehicle for which to retrieve the associated tires.
      * @return ResponseEntity containing the list of TireModel objects associated with the specified vehicle ID.
      */
-    @GetMapping("vehicle/{vehicleId}")
-    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@PathVariable Long vehicleId) {
+    @GetMapping("/vehicle")
+    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@RequestParam Long vehicleId) {
         List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId);
         if(tires.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -185,10 +185,4 @@ public class TireController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @GetMapping("/hola")
-    public String hola() {
-     return "hola";
-    }
-
 }

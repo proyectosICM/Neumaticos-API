@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,13 +23,10 @@ public class RoleService {
     /**
      * Retrieves a paginated list of all roles in the system.
      *
-     * @param page The page number to retrieve (starting from 0).
-     * @param size The size of each page.
      * @return Page of RoleModel objects.
      */
-    public Page<RoleModel> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return roleRepository.findAll(pageable);
+    public List<RoleModel> getAll() {
+        return roleRepository.findAll();
     }
 
     /**

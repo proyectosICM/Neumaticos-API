@@ -9,37 +9,48 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller class to manage operations related to Company entities.
- * This service provides methods to retrieve, create, update, and delete company records in the system.
+ * Handles HTTP requests related to company.
+ * Supports operations such as listing, retrieving, creating, updating, and deleting companies.
  */
 @RestController
-@RequestMapping("api/company")
+@RequestMapping("api/companies")
 public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
 
-
     /**
-     * Retrieves a paginated list of all companies in the system.
+     * Fetches a paginated list of all companies.
      *
-     * @param pageable Pageable object for pagination.
-     * @return Page of CompanyModel objects.
+     * @return list of companies.
      */
-    @GetMapping("/page")
-    public Page<CompanyModel> getAllCompaniesPaginated(Pageable pageable) {
-        return companyService.getAll(pageable);
+    @GetMapping()
+    public List<CompanyModel> getAllCompanies() {
+        return companyService.getAll();
     }
 
+    /**
+     * Fetches a paginated list of all companies.
+     *
+     * @param page The page number to retrieve, default is 0.
+     * @param size The size of the page, default is 6.
+     * @return Paginated list of companies.
+     */
+    @GetMapping("/page")
+    public Page<CompanyModel> getAllCompaniesPaginated(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "6") int size) {
+        return companyService.getAll(page, size);
+    }
 
     /**
      * Retrieves a specific company by its ID.
      *
-     * @param id The ID of the company to retrieve.
-     * @return ResponseEntity containing the CompanyModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
+     * @param id The ID of the company.
+     * @return The requested company if found, or HTTP 404 if not found.
      */
     @GetMapping("/{id}")
     public ResponseEntity<CompanyModel> getById(@PathVariable Long id) {
@@ -49,36 +60,41 @@ public class CompanyController {
     }
 
     /**
-     * Retrieves a list of companies based on their status.
+     * Fetches a list of companies based on their status.
      *
      * @param active Boolean value indicating the status of the companies to retrieve.
-     * @return List of CompanyModel objects associated with the specified status.
+     * @return ResponseEntity containing the paginated list of irregularities and the HTTP status.
      */
-
-    /**
-     * Retrieves a paginated list of companies based on their status.
-     *
-     * @param active   Boolean value indicating the status of the companies to retrieve.
-     * @param pageable Pageable object for pagination.
-     * @return Page of CompanyModel objects associated with the specified status.
-     */
-    @GetMapping("/status/page")
-    public Page<CompanyModel> getCompaniesByStatusPaginated(@RequestParam Boolean active, Pageable pageable) {
-        return companyService.findByStatus(active, pageable);
+    @GetMapping("/status")
+    public List<CompanyModel> getCompaniesByStatusPaginated(@RequestParam Boolean active) {
+        return companyService.findByStatus(active);
     }
 
     /**
-     * Retrieves a paginated list of companies by their name.
+     * Fetches a paginated list of companies based on their status.
+     *
+     * @param active   Boolean value indicating the status of the companies to retrieve.
+     * @param page The page number to retrieve, default is 0.
+     * @param size The size of the page, default is 6.
+     * @return ResponseEntity containing the paginated list of irregularities and the HTTP status.
+     */
+    @GetMapping("/status/page")
+    public Page<CompanyModel> getCompaniesByStatusPaginated(@RequestParam Boolean active,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "6") int size) {
+        return companyService.findByStatus(active, page, size);
+    }
+
+    /**
+     * Fetches a paginated list of companies by their name.
      *
      * @param name     The name of the company to retrieve.
-     * @param pageable Pageable object for pagination.
      * @return Page of CompanyModel objects associated with the specified name.
      */
     @GetMapping("/name/page")
-    public Page<CompanyModel> getCompaniesByNamePaginated(@RequestParam String name, Pageable pageable) {
-        return companyService.findByName(name, pageable);
+    public List<CompanyModel> getCompaniesByNamePaginated(@RequestParam String name) {
+        return companyService.findByName(name);
     }
-
 
     /**
      * Creates a new company record in the system.
@@ -115,7 +131,7 @@ public class CompanyController {
      * @return ResponseEntity containing the updated CompanyModel if the company with the given ID is found,
      * otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
      */
-    @PatchMapping("/{id}/status")
+    @PatchMapping("status/{id}")
     public ResponseEntity<CompanyModel> updateCompanyStatus(@PathVariable Long id, @RequestParam Boolean status) {
         CompanyModel updatedCompany = companyService.updateCompanyStatus(id, status);
         return updatedCompany != null ?

@@ -22,7 +22,7 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     /**
-     * Retrieves a paginated list of all vehicles in the system.
+     * Fetches a paginated list of all vehicles in the system.
      *
      * @param page The page number to retrieve (starting from 0).
      * @param size The size of each page.
@@ -50,7 +50,7 @@ public class VehicleController {
     }
 
     /**
-     * Retrieves a page of vehicles associated with a specific company.
+     * Fetches a page of vehicles associated with a specific company.
      *
      * @param companyId The ID of the company for which to retrieve vehicles.
      * @param page      The page number to retrieve (starting from 0).
@@ -66,7 +66,7 @@ public class VehicleController {
     }
 
     /**
-     * Retrieves a page of vehicles associated with a specific company and in a given state.
+     * Fetches a page of vehicles associated with a specific company and in a given state.
      *
      * @param companyId The ID of the company for which to retrieve vehicles.
      * @param status    The status of the vehicles to filter.
@@ -84,7 +84,7 @@ public class VehicleController {
     }
 
     /**
-     * Retrieves a page of vehicles based on type, status, and company.
+     * Fetches a page of vehicles based on type, status, and company.
      *
      * @param typeId   The ID of the vehicle type.
      * @param status   The status of the vehicles to filter.
@@ -104,7 +104,7 @@ public class VehicleController {
     }
 
     /**
-     * Retrieves a paginated list of vehicles based on type and company.
+     * Fetches a paginated list of vehicles based on type and company.
      *
      * @param vehicleTypeId The ID of the vehicle type.
      * @param companyId     The ID of the company for which to retrieve vehicles.

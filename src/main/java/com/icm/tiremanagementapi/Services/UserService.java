@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,15 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    /**
+     * Retrieves a paginated list of all users in the system.
+     *
+     * @return Page of UserModel objects.
+     */
+    public List<UserModel> getAll() {
+        return userRepository.findAll();
+    }
 
     /**
      * Retrieves a paginated list of all users in the system.
@@ -51,15 +61,26 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Retrieves a  list of users based on their role.
+     *
+     * @param role     The role for which to retrieve users.
+     * @return Page of UserModel objects associated with the specified role.
+     */
+    public List<UserModel> findByRoleId(Long role) {
+        return userRepository.findByRoleId(role);
+    }
 
     /**
      * Retrieves a paginated list of users based on their role.
      *
      * @param role     The role for which to retrieve users.
-     * @param pageable The pageable information for pagination.
+     * @param page The page number to retrieve (starting from 0).
+     * @param size The size of each page.
      * @return Page of UserModel objects associated with the specified role.
      */
-    public Page<UserModel> findByRoleId(Long role, Pageable pageable) {
+    public Page<UserModel> findByRoleId(Long role, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return userRepository.findByRoleId(role, pageable);
     }
 

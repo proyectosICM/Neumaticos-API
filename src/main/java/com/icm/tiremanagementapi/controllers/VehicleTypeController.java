@@ -22,7 +22,7 @@ public class VehicleTypeController {
     private VehicleTypeService vehicleTypeService;
 
     /**
-     * Retrieves a list of all vehicle types in the system.
+     * Fetches a list of all vehicle types in the system.
      *
      * @return List of VehicleTypeModel objects.
      */
