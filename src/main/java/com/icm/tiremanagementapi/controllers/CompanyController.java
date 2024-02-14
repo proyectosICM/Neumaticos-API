@@ -1,12 +1,11 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.CompanyModel;
-import com.icm.tiremanagementapi.Services.CompanyService;
+import com.icm.tiremanagementapi.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

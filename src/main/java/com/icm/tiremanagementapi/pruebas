@@ -1,0 +1,31 @@
+    /**
+     * Fetches performance records for a specific tire on the current day.
+     *
+     * @param tireId The ID of the tire for which performance records are being queried.
+     * @param today The current scheduled meeting to filter records.
+     * @return A list of PerformanceTireModel objects that match the criteria.
+     */
+    @Query("SELECT p FROM PerformanceTireModel p WHERE p.tire.id = :tireId AND Scheduled meeting(p.createdAt) = :today")
+    List<PerformanceTireModel> findByTireIdAndCurrentDate(@Param("tireId") Long tireId, @Param("today") LocalDate today);
+
+
+    /**
+     * Fetches performance records for a specific tire for a given month and year.
+     *
+     * @param tireId The ID of the tire for which performance records are being queried.
+     * @param month The month for filtering records.
+     * @param year The year for filtering records.
+     * @return A list of PerformanceTireModel objects for the specified tire, month, and year.
+     */
+    @Query("SELECT p FROM PerformanceTireModel p WHERE p.tire.id = :tireId AND MONTH(p.createdAt) = :month AND YEAR(p.createdAt) = :year")
+    List<PerformanceTireModel> findByTireIdAndMonthAndYear(@Param("tireId") Long tireId, @Param("month") int month, @Param("year") int year);
+
+    /**
+     * Retrieves performance records for a specific tire for a given year.
+     *
+     * @param tireId The ID of the tire for which performance records are being queried.
+     * @param year The year for filtering records.
+     * @return A list of PerformanceTireModel objects for the specified tire and year.
+     */
+    @Query("SELECT p FROM PerformanceTireModel p WHERE p.tire.id = :tireId AND YEAR(p.createdAt) = :year")
+    List<PerformanceTireModel> findByTireIdAndYear(@Param("tireId") Long tireId, @Param("year") int year);

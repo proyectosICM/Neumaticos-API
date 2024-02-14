@@ -1,9 +1,9 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.UserModel;
-import com.icm.tiremanagementapi.Services.CompanyService;
-import com.icm.tiremanagementapi.Services.RoleService;
-import com.icm.tiremanagementapi.Services.UserService;
+import com.icm.tiremanagementapi.services.CompanyService;
+import com.icm.tiremanagementapi.services.RoleService;
+import com.icm.tiremanagementapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

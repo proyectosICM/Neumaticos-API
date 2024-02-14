@@ -1,8 +1,8 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.TireModel;
-import com.icm.tiremanagementapi.Requests.UpdateTirePropertiesRequest;
-import com.icm.tiremanagementapi.Services.TireService;
+import com.icm.tiremanagementapi.requests.UpdateTirePropertiesRequest;
+import com.icm.tiremanagementapi.services.TireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

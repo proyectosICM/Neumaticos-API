@@ -1,7 +1,7 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
-import com.icm.tiremanagementapi.Services.IrregularitiesTireService;
+import com.icm.tiremanagementapi.services.IrregularitiesTireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
