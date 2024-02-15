@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyAverageDTO {
-    private int day;
-    private int month;
+public class HourlyAverageDTO {
+    private int hour;
     private double avgTemperature;
     private double avgPressure;
     private double avgBatteryLevel;
