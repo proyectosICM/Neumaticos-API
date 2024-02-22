@@ -2,7 +2,9 @@ package com.icm.tiremanagementapi.services;
 
 import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
+import com.icm.tiremanagementapi.services.utils.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,11 @@ import java.util.Optional;
 public class IrregularitiesTireService {
     @Autowired
     private IrregularitiesTireRepository irregularitiesTireRepository;
+    @Autowired
+    private DirectoryService directoryService;
 
+    @Value("${file.image}")
+    private String basePath;
 
     /**
      * Retrieves a paginated list of all tire irregularities in the system.
@@ -89,7 +95,10 @@ public class IrregularitiesTireService {
      * @return The created IrregularitiesTireModel.
      */
     public IrregularitiesTireModel createIrregularity(IrregularitiesTireModel irregularity) {
-        return irregularitiesTireRepository.save(irregularity);
+        IrregularitiesTireModel saveData =  irregularitiesTireRepository.save(irregularity);
+
+        directoryService.createDirectoryWithName(basePath, String.valueOf(saveData.getId()));
+        return saveData;
     }
 
     /**

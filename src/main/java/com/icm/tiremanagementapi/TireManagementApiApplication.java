@@ -17,15 +17,15 @@ import org.springframework.context.ApplicationContext;
 public class TireManagementApiApplication {
 
 	public static void main(String[] args) {
-		/* Initialize Spring Boot application and get the application context */
+		// Initialize Spring Boot application and get the application context
 		ApplicationContext context = SpringApplication.run(TireManagementApiApplication.class, args);
 
-		/* Retrieve the MqttSubscriber bean from the application context
-			This bean is responsible for subscribing to MQTT topics and handling incoming messages */
+		// Retrieve the MqttSubscriber bean from the application context
+		// This bean is responsible for subscribing to MQTT topics and handling incoming messages
 		MqttSubscriber mqttSubscriber = context.getBean(MqttSubscriber.class);
 
-		/* Subscribe to a test topic to start receiving messages.
-          This is a placeholder and should be replaced with actual topic names relevant to your application. */
+		// Subscribe to a test topic to start receiving messages.
+		// This is a placeholder and should be replaced with actual topic names relevant to your application.
 		mqttSubscriber.subscribeToTopic("prueba");
 	}
 }

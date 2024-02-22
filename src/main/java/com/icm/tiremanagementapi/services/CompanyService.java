@@ -2,11 +2,14 @@ package com.icm.tiremanagementapi.services;
 
 import com.icm.tiremanagementapi.models.CompanyModel;
 import com.icm.tiremanagementapi.repositories.CompanyRepository;
+import com.icm.tiremanagementapi.services.utils.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,12 @@ import java.util.Optional;
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private DirectoryService directoryService;
+
+    @Value("${file.image}")
+    private String basePath;
 
     /**
      * Retrieves list of all companies in the system.
@@ -92,7 +101,14 @@ public class CompanyService {
      * @return The created CompanyModel.
      */
     public CompanyModel createCompany(CompanyModel company) {
-        return companyRepository.save(company);
+        // Guarda la empresa en la base de datos.
+        CompanyModel savedCompany = companyRepository.save(company);
+
+        // Crea el directorio para la empresa.
+        directoryService.createDirectoryWithName(basePath, savedCompany.getName());
+        String irregularidadesPath = basePath + File.separator + savedCompany.getName() + File.separator ;
+        directoryService.createDirectoryWithName(irregularidadesPath, "irregularidades");
+        return savedCompany;
     }
 
     /**

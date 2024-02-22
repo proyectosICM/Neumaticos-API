@@ -61,7 +61,7 @@ public class VehicleController {
     public Page<VehicleModel> findByCompanyId(
             @RequestParam Long companyId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "8") int size) {
         return vehicleService.findByCompanyId(companyId, page, size);
     }
 
