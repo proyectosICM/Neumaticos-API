@@ -1,105 +1,97 @@
-    package com.icm.tiremanagementapi.models;
+package com.icm.tiremanagementapi.models;
 
-    import jakarta.annotation.Nullable;
-    import jakarta.persistence.*;
-    import lombok.AllArgsConstructor;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
-    import org.hibernate.annotations.CreationTimestamp;
-    import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-    import java.time.ZoneId;
-    import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+/**
+ * This model is used to store tire irregularities, and a new record is automatically created through a service
+ * whenever irregular changes in temperature, pressure, or battery are detected.
+ */
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "irregularities_tire")
+public class IrregularitiesTireModel {
+    /**
+     * Identifier code that auto-increments with the creation of a record.
+     */
+    @Id
+    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    /**
+     * Descriptive name of the irregularity, summarizing the nature of the issue for quick reference.
+     */
+    private String nameIrregularity;
 
     /**
-     * This class serves as a detailed record of tire-specific issues, offering insights into anomalies that may affect vehicle safety and efficiency.
-     * Irregularities are linked to specific tires and optionally to vehicles, providing a comprehensive view of incidents across the fleet.
+     * Description of the irregularity, including issue details and severity.
      */
-    @Entity
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Table(name = "irregularities_tire")
-    public class IrregularitiesTireModel {
-        /**
-         * Unique identifier for the irregularity,
-         * automatically generated to ensure distinct records within the database.
-         */
-        @Id
-        @Column(unique = true, nullable = false)
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Nullable
+    private String detailsIrregularity;
 
-        /**
-         * Descriptive name of the irregularity, summarizing the nature of the issue for quick reference.
-         */
-        private String nameIrregularity;
+    /**
+     * Vehicle associated with this irregularity, enabling tracking and diagnostics by vehicle.
+     */
+    @ManyToOne
+    @JoinColumn(name = "vehicle", nullable = true)
+    private VehicleModel vehicleModel;
 
+    /**
+     * Company owning the vehicle, mandatory for associating irregularities.
+     */
+    @ManyToOne
+    @JoinColumn(name = "company", nullable = false)
+    private CompanyModel company;
 
-        /**
-         * Detailed description of the irregularity. Provides specific information about the issue, its severity,
-         * and any other relevant details.
-         */
-        @Nullable
-        private String detailsIrregularity;
+    /**
+     * Direct association with the tire experiencing the irregularity, essential for identification.
+     */
+    @ManyToOne
+    @JoinColumn(name = "tire", nullable = false)
+    private TireModel tire;
 
-        /**
-         * Reference to the vehicle associated with this irregularity, if applicable.
-         * This association allows for tracking of irregularities by vehicle, enhancing the system's diagnostic capabilities.
-         */
-        @ManyToOne
-        @JoinColumn(name = "vehicle", nullable = true)
-        private VehicleModel vehicleModel;
+    /**
+     * Indicates the active or inactive status of the irregularity.
+     */
+    private Boolean status;
 
-        /**
-         * Company owning the vehicle. This field is mandatory as every irregularity must be associated with a specific company.
-         */
-        @ManyToOne
-        @JoinColumn(name = "company", nullable = false)
-        private CompanyModel company;
+    /**
+     * Temperature at which the irregularity was recorded, relevant for temperature-specific issues.
+     */
+    private Double recordedTemperature;
 
-        /**
-         * Reference to the tire experiencing the irregularity.
-         * This direct association is crucial for pinpointing the specific tire involved in the irregularity.
-         */
-        @ManyToOne
-        @JoinColumn(name = "tire", nullable = false)
-        private TireModel tire;
+    /**
+     * Captures the pressure level of the tire at the time of the irregularity,
+     * essential for understanding pressure-related issues.
+     */
+    private Double recordedPressure;
 
-        /**
-         * Records the temperature at which the irregularity was identified,
-         * crucial for issues related to thermal performance.
-         */
-        private Boolean status;
+    /**
+     * Logs the battery level of the monitoring device at the time the irregularity was recorded,
+     * relevant for device performance assessment.
+     */
+    private Double recordedBatteryLevel;
 
-        /**
-         * Temperature at which the irregularity was recorded, relevant for temperature-specific issues.
-         */
-        private Double recordedTemperature;
+    /**
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
+     */
+    @Column(name = "createdAt", nullable = false, updatable = false)
+    @CreationTimestamp
+    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-        /**
-         * Captures the pressure level of the tire at the time of the irregularity,
-         * essential for understanding pressure-related issues.
-         */
-        private Double recordedPressure;
-
-        /**
-         * Logs the battery level of the monitoring device at the time the irregularity was recorded, relevant for device performance assessment.
-         */
-        private Double recordedBatteryLevel;
-
-        /**
-         * Timestamp denoting when the irregularity record was initially created,
-         * serving as an audit trail for incident tracking.
-         */
-        @Column(name = "createdAt", nullable = false, updatable = false)
-        @CreationTimestamp
-        private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
-
-        /**
-         * Timestamp indicating the most recent update to the irregularity record, facilitating the monitoring of issue resolution progress.
-         */
-        @Column(name = "updatedAt")
-        @UpdateTimestamp
-        private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
-    }
+    @Column(name = "updatedAt")
+    @UpdateTimestamp
+    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
+}

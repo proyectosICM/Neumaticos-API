@@ -27,9 +27,7 @@ import java.time.ZonedDateTime;
 @Table(name = "company")
 public class CompanyModel {
     /**
-     * Unique identifier for the company, serving as the primary key within the database.
-     * This ID is automatically generated upon creation to ensure each company has a distinct identifier.
-     * It is crucial for linking company-related data across the application.
+     * Identifier code that auto-increments with the creation of a record.
      */
     @Id
     @Column(unique = true, nullable = false)
@@ -37,31 +35,25 @@ public class CompanyModel {
     private Long id;
 
     /**
-     * The registered name of the company. It is used for identification and display purposes throughout the application.
-     In addition to being used to filter data by company (tires, vehicles, workers, etc).
-     * The name is restricted to a maximum of 255 characters to ensure compatibility with external systems and databases.
+     * The name of the company used for identification and display purposes throughout the application
      */
     @Size(max = 255, message = "Name cannot exceed 255 characters")
     private String name;
 
     /**
-     * Indicates whether the company is currently active or inactive.
-     * This is used to determine when and how to display the company based on the filters applied
+     * Indicates if the company is active or inactive for display and filtering purposes.
      */
     private Boolean status;
 
     /**
-     * The date and time when this company was created.
-     * This attribute serves auditing purposes by tracking the initial creation of the record.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdAt", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * The date and time when this record was last updated.
-     * This attribute is used for auditing, allowing tracking of the most recent changes to the record.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

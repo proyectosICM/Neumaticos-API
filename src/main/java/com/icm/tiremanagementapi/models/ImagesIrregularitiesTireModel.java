@@ -2,29 +2,25 @@ package com.icm.tiremanagementapi.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * Defines the categories of vehicles recognized within the Tire Management System.
- * This entity classifies different types of vehicles, facilitating targeted management strategies
- * and maintenance routines specific to each vehicle category.
+ * This model is associated with tire irregularities and is used to add images and context
+ * that can assist in resolving or provide proof for the resolution of the irregularity.
  */
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "vehicletypes")
-public class VehicleTypeModel {
+@Table(name = "irregularities_tire_images")
+public class ImagesIrregularitiesTireModel {
     /**
      * Identifier code that auto-increments with the creation of a record.
      */
@@ -34,25 +30,38 @@ public class VehicleTypeModel {
     private Long id;
 
     /**
-     * The name of the vehicle type, such as 'Truck', 'Forklift', etc.,
-     * which is critical for categorizing and managing vehicles accordingly.
-     * The name is constrained to 50 characters to maintain data uniformity and integrity.
+     * Name of the image in the directory.
      */
-    @NotBlank(message = "Name cannot be blank")
-    @Size(max = 50, message = "Name cannot exceed 50 characters or less")
-    private String name;
+    @Size(max = 50, message = "Name cannot exceed 50 characters")
+    private String imageName;
+
+    /**
+     * Detail that provides an explanation of the problem or event depicted in the image
+     */
+    @Size(max = 550, message = "Name cannot exceed 550 characters")
+    private String details;
+
+    /**
+     * Irregularity associated with the image
+     */
+    @ManyToOne
+    @JoinColumn(name = "irregularities", nullable = true)
+    private IrregularitiesTireModel irregularitiesTireModel;
+
+    @ManyToOne
+    @JoinColumn(name = "company", nullable = true)
+    private CompanyModel companyModel;
 
     /**
      * Timestamps for recording the creation and last update times of the record.
      * - 'createdAt' is set at the time of creation and is not updatable.
      * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
-    @Column(name = "createdat", nullable = false, updatable = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
-
 }

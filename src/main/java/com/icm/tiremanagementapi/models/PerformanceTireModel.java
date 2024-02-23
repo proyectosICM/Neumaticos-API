@@ -12,16 +12,23 @@ import javax.validation.constraints.DecimalMin;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+/**
+ * This model is used to store the performance of tires over time and is utilized to display performance in charts.
+ */
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "performance_tire")
 public class PerformanceTireModel {
+    /**
+     * Identifier code that auto-increments with the creation of a record.
+     */
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     /**
      * Tire temperature measured in degrees Celsius. This property is critical
      * for monitoring tire health and performance, especially under varying operational conditions.
@@ -68,16 +75,14 @@ public class PerformanceTireModel {
     private TireModel tire;
 
     /**
-     * Timestamp denoting when the performance record was initially created,
-     * serving as an audit trail for incident tracking.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdAt", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * Timestamp indicating the most recent update to the irregularity record, facilitating the monitoring of issue resolution progress.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

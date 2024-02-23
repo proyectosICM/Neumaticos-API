@@ -1,0 +1,59 @@
+Coding Conventions
+This document outlines the coding conventions and standards followed in our project to ensure consistency
+and maintainability of the codebase.
+
+General Conventions
+Naming Limits: Names for entities such as companies, roles, etc., should not exceed 50 characters.
+Detail Fields: Fields intended for details or context should not exceed 550 characters.
+Model Auditing: All models must include creation and update timestamps to track their lifecycle.
+
+Naming Conventions
+Use CamelCase for class names and camelCase for method names and variables.
+Constants should be in UPPER_SNAKE_CASE.
+
+Code Structure
+Organize code logically within packages based on functionality.
+Place utility classes in a util package.
+
+Documentation
+Use Javadoc comments for all public classes and methods.
+Comment blocks should briefly describe the purpose and functionality of the code.
+
+Testing
+Follow the Arrange-Act-Assert pattern for unit tests.
+Name test methods using the format: methodName_StateUnderTest_ExpectedBehavior.
+
+Database
+Use snake_case for database table and column names.
+Define foreign key constraints explicitly in entity models.
+
+************************************************************************************************************************
+
+Convenciones de Código
+Este documento describe las convenciones y estándares de codificación seguidos en nuestro proyecto para asegurar la
+consistencia y mantenibilidad del código.
+
+Convenciones Generales
+Límites de Nombres: Los campos de nombres como compañías, roles, etc., no deben superar los 50 caracteres.
+Campos de Detalle: Los campos destinados para detalles o contexto no deben exceder los 550 caracteres.
+Auditoría de Modelos: Todos los modelos deben incluir marcas de tiempo de creación y actualización para rastrear su ciclo de vida.
+
+Convenciones de Nomenclatura
+Utiliza CamelCase para los nombres de clases y camelCase para nombres de métodos y variables.
+Las constantes deben estar en MAYÚSCULAS_CON_GUION_BAJO.
+
+Estructura del Código
+Organiza el código lógicamente dentro de paquetes basados en la funcionalidad.
+Coloca clases de utilidad en un paquete util.
+
+Documentación
+Usa comentarios Javadoc para todas las clases y métodos públicos.
+Los bloques de comentarios deben describir brevemente el propósito y la funcionalidad del código.
+
+Pruebas
+Sigue el patrón Arrange-Act-Assert para las pruebas unitarias.
+Nombra los métodos de prueba usando el formato: nombreMetodo_EstadoSometidoA_Prueba_ComportamientoEsperado.
+
+Base de Datos
+Usa snake_case para los nombres de tablas y columnas de la base de datos.
+Define explícitamente las restricciones de clave foránea en los modelos de entidad.
