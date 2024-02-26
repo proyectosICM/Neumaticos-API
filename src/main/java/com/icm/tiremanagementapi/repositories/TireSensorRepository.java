@@ -10,19 +10,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository interface for managing operations related to Tire entities.
- * This repository provides methods for retrieving, creating, updating, and deleting tire records in the system.
- */
 @Repository
-public interface TireRepository extends JpaRepository<TireModel, Long> {
+public interface TireSensorRepository extends JpaRepository<TireSensorModel, Long> {
     /**
      * Retrieves a specific tire by its identification code.
      *
-     * @param codename The identification code of the tire to retrieve.
+     * @param code The identification code of the tire to retrieve.
      * @return Optional containing the TireModel if found, otherwise empty.
      */
-    Optional<TireModel> findByCodname(String codename);
+    Optional<TireSensorModel> findByIdentificationCode(String code);
 
     /**
      * Finds all tires associated with a specific vehicle using pagination.
@@ -31,7 +27,7 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param pageable The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle.
      */
-    Page<TireModel> findByVehicleModelId(Long vehicle, Pageable pageable);
+    Page<TireSensorModel> findByVehicleModelId(Long vehicle, Pageable pageable);
 
     /**
      * Retrieves a list of all tires associated with a specific vehicle.
@@ -41,7 +37,7 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param vehicle The ID of the vehicle for which to retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
-    List<TireModel> findByVehicleModelId(Long vehicle);
+    List<TireSensorModel> findByVehicleModelId(Long vehicle);
 
 
     /**
@@ -52,5 +48,14 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param pageable The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle and status.
      */
-    Page<TireModel> findByVehicleModelIdAndStatus(Long vehicle, Boolean status, Pageable pageable);
+    Page<TireSensorModel> findByVehicleModelIdAndStatus(Long vehicle, Boolean status, Pageable pageable);
+
+    /**
+     * Finds all tires related to a specific vehicle and positioned at a specified location code without pagination.
+     * Useful for retrieving tires based on their physical location on a vehicle.
+     * @param vehicle The ID of the vehicle for which to find tires.
+     * @param positioning A string representing the positioning code of the tire on the vehicle.
+     * @return A list of TireModel objects that are associated with the given vehicle and have the specified positioning code.
+     */
+    List<TireSensorModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicle, String positioning);
 }

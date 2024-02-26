@@ -1,28 +1,24 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.TireModel;
+import com.icm.tiremanagementapi.models.TireSensorModel;
 import com.icm.tiremanagementapi.requests.UpdateTirePropertiesRequest;
-import com.icm.tiremanagementapi.services.TireService;
+import com.icm.tiremanagementapi.services.TireSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controller class to manage operations related to Tire entities.
- * This service provides methods to retrieve, create, update, and delete tire records in the system.
- */
 @RestController
-@RequestMapping("api/tire")
-public class TireController {
-
+@RequestMapping("api/tireSensor")
+public class TireSensorController {
     @Autowired
-    private TireService tireService;
+    private TireSensorService tireSensorService;
 
     /**
      * Retrieves a list of all tires in the system.
@@ -30,8 +26,8 @@ public class TireController {
      * @return List of TireModel objects.
      */
     @GetMapping
-    public List<TireModel> getAll() {
-        return tireService.getAll();
+    public List<TireSensorModel> getAll() {
+        return tireSensorService.getAll();
     }
 
     /**
@@ -41,10 +37,23 @@ public class TireController {
      * @return ResponseEntity containing the TireModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TireModel> getById(@PathVariable Long id) {
-        Optional<TireModel> tire = tireService.getById(id);
+    public ResponseEntity<TireSensorModel> getById(@PathVariable Long id) {
+        Optional<TireSensorModel> tire = tireSensorService.getById(id);
         return tire.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Retrieves a specific tire by its identification code.
+     *
+     * @param code The identification code of the tire to retrieve.
+     * @return ResponseEntity containing the TireModel if found, otherwise returns 404 Not Found.
+     */
+    @GetMapping("/code")
+    public ResponseEntity<TireSensorModel> getTireByIdentificationCode(@RequestParam String code) {
+        Optional<TireSensorModel> tire = tireSensorService.findByIdentificationCode(code);
+        return tire.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -56,8 +65,8 @@ public class TireController {
      * @return ResponseEntity containing the list of TireModel objects associated with the specified vehicle ID.
      */
     @GetMapping("/vehicle")
-    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@RequestParam Long vehicleId) {
-        List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId);
+    public ResponseEntity<List<TireSensorModel>> findTiresByVehicleId(@RequestParam Long vehicleId) {
+        List<TireSensorModel> tires = tireSensorService.findTiresByVehicleId(vehicleId);
         if(tires.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -73,12 +82,12 @@ public class TireController {
      * @return Page of TireModel objects associated with the specified vehicle.
      */
     @GetMapping("/findByVehiclePaged")
-    public Page<TireModel> findByVehiclePaged(
+    public Page<TireSensorModel> findByVehiclePaged(
             @RequestParam Long vehicleId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page, size);
-        return tireService.findByVehicleModelId(vehicleId, pageable);
+        return tireSensorService.findByVehicleModelId(vehicleId, pageable);
     }
 
     /**
@@ -91,25 +100,43 @@ public class TireController {
      * @return ResponseEntity containing a Page of TireModel objects associated with the specified vehicle and status.
      */
     @GetMapping("/findByVehicleAndStatus")
-    public ResponseEntity<Page<TireModel>> findByVehicleModelIdAndStatus(
+    public ResponseEntity<Page<TireSensorModel>> findByVehicleModelIdAndStatus(
             @RequestParam Long vehicleId,
             @RequestParam Boolean status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page, size);
-        Page<TireModel> tires = tireService.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
+        Page<TireSensorModel> tires = tireSensorService.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 
     /**
+     * Endpoint to find all tires related to a specific vehicle and positioned at a specified location code.
+     * @param vehicleId The ID of the vehicle for which to find tires.
+     * @param positioningCode The positioning code of the tire on the vehicle.
+     * @return ResponseEntity with a list of TireModel objects associated with the given vehicle and positioning code.
+     */
+    @GetMapping("/byVehicleAndPositioning")
+    public ResponseEntity<List<TireSensorModel>> findTiresByVehicleAndPositioning(
+            @RequestParam Long vehicleId,
+            @RequestParam String positioningCode) {
+        List<TireSensorModel> tires = tireSensorService.findTiresByVehicleAndPositioning(vehicleId, positioningCode);
+        if (tires.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
+
+    /**
      * Creates a new tire record in the system.
      *
-     * @param tireModel The TireModel object representing the new tire.
+     * @param tireSensorModel The TireModel object representing the new tire.
      * @return ResponseEntity containing the created TireModel and HttpStatus.CREATED.
      */
     @PostMapping
-    public ResponseEntity<TireModel> createTire(@RequestBody TireModel tireModel) {
-        TireModel createdTire = tireService.createTire(tireModel);
+    public ResponseEntity<TireSensorModel> createTire(@RequestBody TireSensorModel tireSensorModel) {
+        TireSensorModel createdTire = tireSensorService.createTire(tireSensorModel);
         return new ResponseEntity<>(createdTire, HttpStatus.CREATED);
     }
 
@@ -121,8 +148,8 @@ public class TireController {
      * @return ResponseEntity containing the updated TireModel if found, otherwise returns ResponseEntity with HttpStatus.NOT_FOUND.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<TireModel> updateTire(@RequestBody TireModel tireModel, @PathVariable Long id) {
-        TireModel updatedTire = tireService.updateTire(tireModel, id);
+    public ResponseEntity<TireSensorModel> updateTire(@RequestBody TireSensorModel tireModel, @PathVariable Long id) {
+        TireSensorModel updatedTire = tireSensorService.updateTire(tireModel, id);
         return updatedTire != null ?
                 new ResponseEntity<>(updatedTire, HttpStatus.OK) :
                 ResponseEntity.notFound().build();
@@ -136,7 +163,22 @@ public class TireController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTire(@PathVariable Long id) {
-        tireService.deleteTire(id);
+        tireSensorService.deleteTire(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/updateProperties")
+    public ResponseEntity<TireSensorModel> updateTireProperties(@RequestBody UpdateTirePropertiesRequest request) {
+        try {
+            TireSensorModel updatedTire = tireSensorService.updateProperties(
+                    request.getTemperature(),
+                    request.getPressure(),
+                    request.getBattery(),
+                    request.getIdvehicle(),
+                    request.getIdtire()
+            );
+            return ResponseEntity.ok(updatedTire);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.icm.tiremanagementapi.services;
 
 import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
 import com.icm.tiremanagementapi.models.TireModel;
+import com.icm.tiremanagementapi.models.TireSensorModel;
 import com.icm.tiremanagementapi.models.VehicleModel;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.repositories.TireRepository;
@@ -49,21 +50,11 @@ public class TireService {
     }
 
     /**
-     * Retrieves a specific tire by its identification code.
-     *
-     * @param code The identification code of the tire to retrieve.
-     * @return Optional containing the TireModel if found, otherwise empty.
-     */
-    public Optional<TireModel> findByIdentificationCode(String code) {
-        return tireRepository.findByIdentificationCode(code);
-    }
-
-    /**
      * Retrieves a list of all tires associated with a specific vehicle.
      * This method is designed to fetch a comprehensive list without pagination,
      * suitable for scenarios where the complete set of associated tires is required.
      *
-     * @param vehicleId The ID of the vehicle for which to retrieve the associated tires.
+     * @param vehicleId The ID of the vehicle for which to   retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
     public List<TireModel> findTiresByVehicleId(Long vehicleId) {
@@ -82,17 +73,6 @@ public class TireService {
     }
 
     /**
-     * Finds all tires related to a specific vehicle and positioned at a specified location code.
-     * Useful for retrieving tires based on their physical location on a vehicle.
-     * @param vehicle The ID of the vehicle for which to find tires.
-     * @param positioning The positioning code of the tire on the vehicle.
-     * @return A list of TireModel objects associated with the given vehicle and positioning code.
-     */
-    public List<TireModel> findTiresByVehicleAndPositioning(Long vehicle, String positioning) {
-        return tireRepository.findByVehicleModelIdAndPositioningLocationCode(vehicle, positioning);
-    }
-
-    /**
      * Retrieves a paginated list of tires associated with a specific vehicle and status.
      *
      * @param vehicleId The ID of the vehicle for which to retrieve tires.
@@ -100,9 +80,10 @@ public class TireService {
      * @param pageable  The pageable information for pagination.
      * @return Page of TireModel objects associated with the specified vehicle and status.
      */
-    public Page<TireModel> findByVehicleModelIdAndStatus(Long vehicleId, Boolean status, Pageable pageable) {
+    public Page<TireModel > findByVehicleModelIdAndStatus(Long vehicleId, Boolean status, Pageable pageable) {
         return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
+
 
     /**
      * Creates a new tire record in the system.
@@ -124,9 +105,7 @@ public class TireService {
     public TireModel updateTire(TireModel tire, Long id) {
         return tireRepository.findById(id)
                 .map(existingTire -> {
-                    existingTire.setIdentificationCode(tire.getIdentificationCode());
-                    existingTire.setTemperature(tire.getTemperature());
-                    existingTire.setPressure(tire.getPressure());
+                    existingTire.setCodname(tire.getCodname());
                     return tireRepository.save(existingTire);
                 })
                 .orElse(null);
@@ -141,93 +120,4 @@ public class TireService {
         tireRepository.deleteById(id);
     }
 
-    public TireModel updateProperties(Double temperature, Double pressure, Integer battery, Long idvehicle, Long idtire) {
-        VehicleModel vehicle = vehicleRepository.findById(idvehicle)
-                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
-        TireModel tire = tireRepository.findById(idtire)
-                .orElseThrow(() -> new RuntimeException("Neumático no encontrado"));
-
-        // Ejecuta las verificaciones consolidadas y decide sobre la creación de irregularidades
-        CheckResult checkResult = checkAllConditions(temperature, pressure, battery, vehicle, tire);
-        if (checkResult.isShouldCreateIrregularity()) {
-            createIrregularity(checkResult, tire);
-        }
-
-        // Actualiza las propiedades del neumático según los datos recibidos
-        tire.setTemperature(temperature);
-        tire.setBatteryLevel(battery.doubleValue());
-        tire.setPressure(pressure);
-
-        // Guarda el neumático actualizado en la base de datos
-        return tireRepository.save(tire);
-    }
-
-
-    private CheckResult checkAllConditions(Double temperature, Double pressure, Integer battery, VehicleModel vehicle, TireModel tire) {
-        CheckResult result = new CheckResult();
-        StringBuilder nameBuilder = new StringBuilder();
-        StringBuilder detailBuilder = new StringBuilder();
-
-        // Verificar batería
-        if (battery <= 30) {
-            result.setShouldCreateIrregularity(true);
-            nameBuilder.append("Batería baja; ");
-            detailBuilder.append(String.format("Batería por debajo del %d%%. ", battery));
-            result.setRecordedBatteryLevel(battery.doubleValue());
-        }
-
-        // Verificar presión
-        if (pressure.compareTo(vehicle.getStandardPressure()) < 0) {
-            result.setShouldCreateIrregularity(true);
-            nameBuilder.append("Presión baja; ");
-            detailBuilder.append("Presión demasiado baja para el estándar definido. ");
-            result.setRecordedPressure(pressure);
-        } else if (pressure.compareTo(vehicle.getStandardPressure()) > 0) {
-            result.setShouldCreateIrregularity(true);
-            nameBuilder.append("Presión alta; ");
-            detailBuilder.append("Presión demasiado alta para el estándar definido. ");
-            result.setRecordedPressure(pressure);
-        }
-
-        // Verificar temperatura
-        if (temperature.compareTo(vehicle.getStandardTemperature()) < 0) {
-            result.setShouldCreateIrregularity(true);
-            nameBuilder.append("Temperatura baja; ");
-            detailBuilder.append("Temperatura demasiado baja para el estándar definido. ");
-            result.setRecordedTemperature(temperature);
-        } else if (temperature.compareTo(vehicle.getStandardTemperature()) > 0) {
-            result.setShouldCreateIrregularity(true);
-            nameBuilder.append("Temperatura alta; ");
-            detailBuilder.append("Temperatura demasiado alta para el estándar definido. ");
-            result.setRecordedTemperature(temperature);
-        }
-
-        result.setIrregularityName(nameBuilder.toString());
-        result.setIrregularityDetail(detailBuilder.toString());
-        result.setIdtire(tire.getId());
-        return result;
-    }
-
-    private void createIrregularity(CheckResult checkResult, TireModel tire) {
-        ZonedDateTime tenMinutesAgo = ZonedDateTime.now().minusMinutes(10);
-        List<IrregularitiesTireModel> recentIrregularities = irregularitiesTireRepository.findByNameIrregularityAndTireIdAndCreatedAtGreaterThanEqual(checkResult.getIrregularityName(), tire.getId(), tenMinutesAgo);
-
-        if (!recentIrregularities.isEmpty()) {
-            // Existe al menos una incidencia en los últimos 10 minutos con el mismo nombre
-            return; // No crear una nueva irregularidad
-        }
-
-        // No se encontraron incidencias recientes, proceder a crear una nueva
-        IrregularitiesTireModel irregularity = new IrregularitiesTireModel();
-        irregularity.setNameIrregularity(checkResult.getIrregularityName());
-        irregularity.setDetailsIrregularity(checkResult.getIrregularityDetail());
-        irregularity.setVehicleModel(tire.getVehicleModel());
-        irregularity.setCompany(tire.getCompany());
-        irregularity.setStatus(true); // Asumiendo que true indica una irregularidad activa
-        irregularity.setRecordedTemperature(checkResult.getRecordedTemperature());
-        irregularity.setRecordedPressure(checkResult.getRecordedPressure());
-        irregularity.setRecordedBatteryLevel(checkResult.getRecordedBatteryLevel());
-        irregularity.setTire(tire);
-        irregularitiesTireRepository.save(irregularity);
-    }
 }

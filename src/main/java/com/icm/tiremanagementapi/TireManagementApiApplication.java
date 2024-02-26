@@ -1,5 +1,8 @@
 package com.icm.tiremanagementapi;
 
+import com.icm.tiremanagementapi.models.CompanyModel;
+import com.icm.tiremanagementapi.models.RoleModel;
+import com.icm.tiremanagementapi.models.UserModel;
 import com.icm.tiremanagementapi.mqtt.MqttSubscriber;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,4 +31,33 @@ public class TireManagementApiApplication {
 		// This is a placeholder and should be replaced with actual topic names relevant to your application.
 		mqttSubscriber.subscribeToTopic("prueba");
 	}
+/*
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Bean
+	CommandLineRunner init(){
+		return args -> {
+			CompanyModel empresa = new CompanyModel();
+			empresa.setId(1L);
+
+			RoleModel rol = new RoleModel();
+			rol.setId(1L);
+
+			UserModel userModel = UserModel.builder()
+					.username("sup")
+					.password(passwordEncoder.encode("1234"))
+					.name("Eduardo")
+					.lastname("Antahurco")
+					.email("eluis3@gmail.com")
+					.role(rol)
+					.company(empresa)
+					.build();
+			userRepository.save(userModel);
+		};
+	}
+ */
 }

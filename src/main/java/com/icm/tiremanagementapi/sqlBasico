@@ -1,0 +1,79 @@
+Insertar Roles
+INSERT INTO `role` (`id`, `name`) VALUES (NULL, 'Conductor'), (NULL, 'Supervisor'), (NULL, 'Administrador');
+
+Insetar Empresa Base
+INSERT INTO `company` (`id`, `name`, `status`) VALUES (NULL, 'ICM', 1)
+
+Insertar los tipos de camiones
+
+INSERT INTO `vehicletypes` (`id`, `name`) VALUES
+(NULL, 'Montacargas 4 Ruedas'),
+(NULL, 'Montacargas 6 Ruedas'),
+(NULL, 'Camiones 4 Ruedas'),
+(NULL, 'Camiones 6 Ruedas'),
+(NULL, 'Camiones 10 Ruedas'),
+(NULL, 'Camiones 14 Ruedas'),
+(NULL, 'Carreta 12 Ruedas'),
+(NULL, 'Carreta 16 Ruedas');
+
+Insertar Vehiculos Base
+
+INSERT INTO `vehicle` (`id`,`placa`, `status`, `company`, `type`, `standard_temperature`, `standard_pressure`) VALUES
+(NULL, 'ABC-123', 1, 1, 1. 22, 22),
+(NULL, 'ABC-124', 1, 1, 2, 22, 22),
+(NULL, 'ABC-125', 1, 1, 3, 22, 22),
+(NULL, 'ABC-126', 1, 1, 4, 22, 22),
+(NULL, 'ABC-127', 1, 1, 5, 22, 22),
+(NULL, 'ABC-128', 1, 1, 6, 22, 22),
+(NULL, 'ABC-129', 1, 1, 7, 22, 22),
+(NULL, 'ABC-130', 1, 1, 8, 22, 22);
+
+/* Posiciones Montacargas 4 Ruedas */
+INSERT INTO `positioning` (`id`, `axle`, `createdat`, `description`, `location_code`, `position_on_axle`, `side_of_vehicle`, `updated_at`, `type`) VALUES
+(1, 'Delantero', '2024-02-08 21:59:08', 'Neumático delantero izquierdo', '1', 'Exterior', NULL, NULL, 1),
+(2, 'Delantero', '2024-02-08 21:59:08', 'Neumático delantero derecho', '2', 'Exterior', NULL, NULL, 1),
+(3, 'Trasero', '2024-02-08 21:59:08', 'Neumático Trasero izquierdo', '3', 'Exterior', NULL, NULL, 1),
+(4, 'Trasero', '2024-02-08 21:59:08', 'Neumático Trasero derecho', '4', 'Exterior', NULL, NULL, 1);
+
+/* Neumaticos */
+INSERT INTO `tires` (`id`, `codname`, `createdat`, `status`, `updated_at`, `vehicle`) VALUES
+(NULL, 'AAAAAA01', '2024-02-26 22:08:58.000000', b'1', NULL, '1'),
+(NULL, 'AAAAAA02', '2024-02-26 22:08:58.000000', b'1', NULL, '1');
+(NULL, 'AAAAAA03', '2024-02-26 22:08:58.000000', b'1', NULL, '1'),
+(NULL, 'AAAAAA04', '2024-02-26 22:08:58.000000', b'1', NULL, '1');
+
+INSERT INTO `tires_sensor` (`id`, `battery_level`, `createdat`, `identification_code`, `pressure`, `status`, `temperature`, `updated_at`, `vehicle`, `positioning`, `company`, `alerted`) VALUES
+(1, 80, '2024-02-08 22:14:57', '0001', 30.5, b'1', 10, NULL, 1, 1, 1, NULL),
+(2, 45, '2024-02-08 22:15:46', '0002', 12, b'1', 14, NULL, 1, 2, 1, NULL),
+(3, 23, '2024-02-08 22:16:11', '0003', 54, b'1', 12, NULL, 1, 3, 1, NULL),
+(4, 46, '2024-02-08 22:17:45', '0004', 12, b'1', 12, NULL, 1, 4, 1, NULL);
+
+Creacion de usuario al iniciar aplicaicon
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Bean
+	CommandLineRunner init(){
+		return args -> {
+			CompanyModel empresa = new CompanyModel();
+			empresa.setId(1L);
+
+			RoleModel rol = new RoleModel();
+			rol.setId(4L);
+
+			UserModel userModel = UserModel.builder()
+					.username("sa")
+					.password(passwordEncoder.encode("1234"))
+					.name("Eduardo")
+					.lastname("Antahurco")
+					.email("eluis3@gmail.com")
+					.role(rol)
+					.company(empresa)
+					.build();
+			userRepository.save(userModel);
+		};
+	}

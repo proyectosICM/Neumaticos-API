@@ -42,7 +42,7 @@ public interface IrregularitiesTireRepository extends JpaRepository<Irregulariti
      */
     Page<IrregularitiesTireModel> findByVehicleModelIdOrderByCreatedAtDesc(Long vehicleModelId, Pageable pageable);
 
-    @Query("SELECT it FROM IrregularitiesTireModel it WHERE it.nameIrregularity = :nameIrregularity AND it.tire.id = :tireId AND it.createdAt >= :startTime")
-    List<IrregularitiesTireModel> findByNameIrregularityAndTireIdWithinTimeframe(@Param("nameIrregularity") String nameIrregularity, @Param("tireId") Long tireId, @Param("startTime") ZonedDateTime startTime);
-    List<IrregularitiesTireModel> findByNameIrregularityAndTireIdAndCreatedAtGreaterThanEqual(String  name, Long tireId,  ZonedDateTime startTime);
+    @Query("SELECT it FROM IrregularitiesTireModel it WHERE it.nameIrregularity = :nameIrregularity AND it.tireSensorModel.id = :tireId AND it.createdAt >= :startTime")
+    List<IrregularitiesTireModel> findByNameIrregularityAndTireSensorModelIdWithinTimeframe(@Param("nameIrregularity") String nameIrregularity, @Param("tireId") Long tireId, @Param("startTime") ZonedDateTime startTime);
+    List<IrregularitiesTireModel> findByNameIrregularityAndTireSensorModelIdAndCreatedAtGreaterThanEqual(String  name, Long tireId,  ZonedDateTime startTime);
 }

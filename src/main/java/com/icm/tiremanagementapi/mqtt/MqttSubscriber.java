@@ -2,6 +2,8 @@ package com.icm.tiremanagementapi.mqtt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icm.tiremanagementapi.models.TireSensorModel;
+import com.icm.tiremanagementapi.services.TireSensorService;
 import com.icm.tiremanagementapi.services.TireService;
 import com.icm.tiremanagementapi.models.TireModel;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class MqttSubscriber {
 
     @Autowired
-    private TireService tireService;
+    private TireSensorService tireSensorService;
     @Autowired
     private IMqttClient mqttClient;
 
@@ -42,12 +44,12 @@ public class MqttSubscriber {
                     ObjectMapper objectMapper = new ObjectMapper();
 
                     try {
-                        TireModel tireModel = objectMapper.readValue(payload, TireModel.class);
+                        TireSensorModel tireModel = objectMapper.readValue(payload, TireSensorModel.class);
                         // Extract necessary properties from the TireModel object
                         Long idvehicle = tireModel.getVehicleModel().getId();
                         Long idtire = tireModel.getId();
                         // Update tire properties based on the received message
-                        tireService.updateProperties(tireModel.getTemperature(), tireModel.getPressure(), tireModel.getBatteryLevel().intValue(), idvehicle, idtire);
+                        tireSensorService.updateProperties(tireModel.getTemperature(), tireModel.getPressure(), tireModel.getBatteryLevel().intValue(), idvehicle, idtire);
                     } catch (JsonProcessingException e) {
                         // Handle JSON parsing errors
                         System.err.println("Error al deserializar el JSON: " + e.getMessage());

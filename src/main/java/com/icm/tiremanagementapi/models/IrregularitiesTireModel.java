@@ -58,7 +58,7 @@ public class IrregularitiesTireModel {
      */
     @ManyToOne
     @JoinColumn(name = "tire", nullable = false)
-    private TireModel tire;
+    private TireSensorModel tireSensorModel;
 
     /**
      * Indicates the active or inactive status of the irregularity.
