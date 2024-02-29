@@ -1,6 +1,7 @@
 package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.TireModel;
+import com.icm.tiremanagementapi.models.TireStatus;
 import com.icm.tiremanagementapi.requests.UpdateTirePropertiesRequest;
 import com.icm.tiremanagementapi.services.TireService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,9 @@ public class TireController {
      * @return ResponseEntity containing the list of TireModel objects associated with the specified vehicle ID.
      */
     @GetMapping("/vehicle")
-    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@RequestParam Long vehicleId) {
-        List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId);
+    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@RequestParam Long vehicleId,
+                                                                @RequestParam("status") TireStatus status) {
+        List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId, status);
         if(tires.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -101,6 +103,23 @@ public class TireController {
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 
+    @GetMapping("/findByCompanyModelIdAndStatus")
+    public ResponseEntity<List<TireModel>> findByCompanyModelIdAndStatus(
+            @RequestParam Long companyId,
+            @RequestParam Boolean status) {
+        List<TireModel> tires = tireService.findByCompanyModelIdAndStatus(companyId, status);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
+    @GetMapping("/findByVehicleModelIdAndPositioningLocationCode")
+    public ResponseEntity<List<TireModel>> findByVehicleModelIdAndId(
+            @RequestParam Long vehicleId,
+            @RequestParam String positioning) {
+        List<TireModel> tires = tireService.findByVehicleModelIdAndPositioningLocationCode(vehicleId, positioning);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
+
     /**
      * Creates a new tire record in the system.
      *
@@ -123,6 +142,14 @@ public class TireController {
     @PutMapping("/{id}")
     public ResponseEntity<TireModel> updateTire(@RequestBody TireModel tireModel, @PathVariable Long id) {
         TireModel updatedTire = tireService.updateTire(tireModel, id);
+        return updatedTire != null ?
+                new ResponseEntity<>(updatedTire, HttpStatus.OK) :
+                ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/changeTire/{id}")
+    public ResponseEntity<TireModel> changeTire(@RequestBody TireModel tireModel, @PathVariable Long id) {
+        TireModel updatedTire = tireService.changeTire(tireModel, id);
         return updatedTire != null ?
                 new ResponseEntity<>(updatedTire, HttpStatus.OK) :
                 ResponseEntity.notFound().build();

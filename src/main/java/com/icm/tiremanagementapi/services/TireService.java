@@ -1,9 +1,6 @@
 package com.icm.tiremanagementapi.services;
 
-import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
-import com.icm.tiremanagementapi.models.TireModel;
-import com.icm.tiremanagementapi.models.TireSensorModel;
-import com.icm.tiremanagementapi.models.VehicleModel;
+import com.icm.tiremanagementapi.models.*;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.repositories.TireRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
@@ -57,8 +54,8 @@ public class TireService {
      * @param vehicleId The ID of the vehicle for which to   retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
-    public List<TireModel> findTiresByVehicleId(Long vehicleId) {
-        return tireRepository.findByVehicleModelId(vehicleId);
+    public List<TireModel> findTiresByVehicleId(Long vehicleId, TireStatus status) {
+        return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status);
     }
 
     /**
@@ -84,6 +81,13 @@ public class TireService {
         return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
 
+    public List<TireModel> findByCompanyModelIdAndStatus(Long companyId, Boolean status) {
+        return tireRepository.findByCompanyModelIdAndStatus(companyId, status);
+    }
+
+    public List<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, String positioning) {
+        return tireRepository.findByVehicleModelIdAndPositioningLocationCode(vehicleId, positioning);
+    }
 
     /**
      * Creates a new tire record in the system.
@@ -106,6 +110,18 @@ public class TireService {
         return tireRepository.findById(id)
                 .map(existingTire -> {
                     existingTire.setCodname(tire.getCodname());
+                    existingTire.setStatus(tire.getStatus());
+                    return tireRepository.save(existingTire);
+                })
+                .orElse(null);
+    }
+
+    public TireModel changeTire(TireModel tire, Long id) {
+        return tireRepository.findById(id)
+                .map(existingTire -> {
+                    existingTire.setStatus(tire.getStatus());
+                    existingTire.setVehicleModel(tire.getVehicleModel());
+                    existingTire.setPositioning(tire.getPositioning());
                     return tireRepository.save(existingTire);
                 })
                 .orElse(null);

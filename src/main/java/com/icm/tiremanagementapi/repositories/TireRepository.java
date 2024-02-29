@@ -2,6 +2,7 @@ package com.icm.tiremanagementapi.repositories;
 
 import com.icm.tiremanagementapi.models.TireModel;
 import com.icm.tiremanagementapi.models.TireSensorModel;
+import com.icm.tiremanagementapi.models.TireStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,7 +42,7 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param vehicle The ID of the vehicle for which to retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
-    List<TireModel> findByVehicleModelId(Long vehicle);
+    List<TireModel> findByVehicleModelIdAndStatus(Long vehicle, TireStatus status);
 
 
     /**
@@ -53,4 +54,8 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @return Page of TireModel objects associated with the specified vehicle and status.
      */
     Page<TireModel> findByVehicleModelIdAndStatus(Long vehicle, Boolean status, Pageable pageable);
+
+    List<TireModel> findByCompanyModelIdAndStatus(Long company, Boolean status);
+
+    List<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, String positioning);
 }

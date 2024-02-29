@@ -36,7 +36,12 @@ public class TireModel {
 
     private String codname;
 
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    private TireStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "positioning", nullable = true)
+    private PositioningModel positioning;
 
     /**
      * Links this tire to a specific vehicle within the system, enabling association between tires and vehicles.
@@ -44,6 +49,10 @@ public class TireModel {
     @ManyToOne
     @JoinColumn(name = "vehicle", nullable = true)
     private VehicleModel vehicleModel;
+
+    @ManyToOne
+    @JoinColumn(name = "company", nullable = true)
+    private CompanyModel companyModel;
 
     /**
      * Records the creation timestamp of the tire record, providing audit capabilities.

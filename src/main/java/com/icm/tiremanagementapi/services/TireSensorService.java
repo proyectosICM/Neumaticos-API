@@ -122,9 +122,7 @@ public class TireSensorService {
     public TireSensorModel updateTire(TireSensorModel tire, Long id) {
         return tireSensorRepository.findById(id)
                 .map(existingTire -> {
-                    existingTire.setIdentificationCode(tire.getIdentificationCode());
-                    existingTire.setTemperature(tire.getTemperature());
-                    existingTire.setPressure(tire.getPressure());
+                    existingTire.setVehicleModel(tire.getVehicleModel());
                     return tireSensorRepository.save(existingTire);
                 })
                 .orElse(null);
