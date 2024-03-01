@@ -119,7 +119,7 @@ public class TireSensorController {
     @GetMapping("/byVehicleAndPositioning")
     public ResponseEntity<List<TireSensorModel>> findTiresByVehicleAndPositioning(
             @RequestParam Long vehicleId,
-            @RequestParam String positioningCode) {
+                @RequestParam String positioningCode) {
         List<TireSensorModel> tires = tireSensorService.findTiresByVehicleAndPositioning(vehicleId, positioningCode);
         if (tires.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
