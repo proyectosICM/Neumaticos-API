@@ -42,7 +42,7 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param vehicle The ID of the vehicle for which to retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
-    List<TireModel> findByVehicleModelIdAndStatus(Long vehicle, TireStatus status);
+    List<TireModel> findByStatus(TireStatus status);
 
 
     /**

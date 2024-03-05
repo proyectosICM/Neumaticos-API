@@ -127,7 +127,13 @@ public class TireSensorController {
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 
-
+    @GetMapping("/findByCompanyModelIdAndStatus")
+    public ResponseEntity<List<TireSensorModel>> findByCompanyModelIdAndStatus(
+            @RequestParam Long companyId,
+            @RequestParam Boolean status) {
+        List<TireSensorModel> tires = tireSensorService.findByCompanyModelIdAndStatus(companyId, status);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
     /**
      * Creates a new tire record in the system.
      *
@@ -153,6 +159,21 @@ public class TireSensorController {
         return updatedTire != null ?
                 new ResponseEntity<>(updatedTire, HttpStatus.OK) :
                 ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/changeSensor")
+    public ResponseEntity<TireSensorModel> changeSensor(
+            @RequestParam Long id1,
+            @RequestParam Long id2,
+            @RequestParam String pos,
+            @RequestParam Long v){
+            TireSensorModel updatedSensor = tireSensorService.changeSensor(id1, id2, pos, v);
+
+            if (updatedSensor != null) {
+                return new ResponseEntity<>(updatedSensor, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
     }
 
     /**

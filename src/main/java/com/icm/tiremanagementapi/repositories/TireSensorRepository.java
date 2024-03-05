@@ -2,6 +2,7 @@ package com.icm.tiremanagementapi.repositories;
 
 import com.icm.tiremanagementapi.models.TireModel;
 import com.icm.tiremanagementapi.models.TireSensorModel;
+import com.icm.tiremanagementapi.models.TireStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface TireSensorRepository extends JpaRepository<TireSensorModel, Long> {
+    List<TireSensorModel> findByCompanyIdAndStatus(Long company, Boolean status);
     /**
      * Retrieves a specific tire by its identification code.
      *

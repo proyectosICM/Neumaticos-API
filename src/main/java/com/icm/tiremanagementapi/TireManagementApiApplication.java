@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
  * This setup demonstrates the integration of MQTT communication within a Spring Boot application,
  * facilitating real-time data exchange with IoT devices or other MQTT-enabled systems.
  */
+
 @SpringBootApplication
 public class TireManagementApiApplication {
 

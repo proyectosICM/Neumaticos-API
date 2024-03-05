@@ -2,6 +2,7 @@ package com.icm.tiremanagementapi.services;
 
 import com.icm.tiremanagementapi.models.*;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
+import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
@@ -27,6 +28,9 @@ public class TireService {
 
     @Autowired
     private IrregularitiesTireRepository irregularitiesTireRepository;
+
+    @Autowired
+    private PositioningRepository positioningRepository;
     /**
      * Retrieves a list of all tires in the system.
      *
@@ -54,8 +58,8 @@ public class TireService {
      * @param vehicleId The ID of the vehicle for which to   retrieve the associated tires.
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
-    public List<TireModel> findTiresByVehicleId(Long vehicleId, TireStatus status) {
-        return tireRepository.findByVehicleModelIdAndStatus(vehicleId, status);
+    public List<TireModel> findTiresByVehicleId(TireStatus status) {
+        return tireRepository.findByStatus(status);
     }
 
     /**
@@ -117,15 +121,62 @@ public class TireService {
     }
 
     public TireModel changeTire(TireModel tire, Long id) {
-        return tireRepository.findById(id)
-                .map(existingTire -> {
-                    existingTire.setStatus(tire.getStatus());
-                    existingTire.setVehicleModel(tire.getVehicleModel());
-                    existingTire.setPositioning(tire.getPositioning());
-                    return tireRepository.save(existingTire);
-                })
-                .orElse(null);
+        if (TireStatus.FREE.equals(tire.getStatus())) {
+            return tireRepository.findById(id)
+                    .map(existingTire -> {
+                        existingTire.setStatus(TireStatus.FREE);
+                        existingTire.setVehicleModel(null);
+                        existingTire.setPositioning(null);
+                        return tireRepository.save(existingTire);
+                    })
+                    .orElse(null);
+        } else if (TireStatus.IN_USE.equals(tire.getStatus())) {
+            return tireRepository.findById(id)
+                    .map(existingTire -> {
+                        existingTire.setStatus(TireStatus.IN_USE);
+                        existingTire.setVehicleModel(tire.getVehicleModel());
+                        existingTire.setPositioning(tire.getPositioning());
+                        return tireRepository.save(existingTire);
+                    })
+                    .orElse(null);
+        }
+        return null; // Retorna null si no se cumple ninguna condición
     }
+    public TireModel changeTire2(Long id1, Long id2, String pos, Long v) {
+        // Primero, intentamos encontrar y actualizar el primer neumático.
+        Optional<TireModel> result1 = tireRepository.findById(id1).map(
+                n1 -> {
+                    n1.setStatus(TireStatus.FREE);
+                    n1.setVehicleModel(null);
+                    n1.setPositioning(null);
+                    return tireRepository.save(n1);
+                });
+
+        // Verificamos si el primer neumático fue actualizado con éxito.
+        if (result1.isPresent()) {
+            VehicleModel vehicle = new VehicleModel();
+            vehicle.setId(v);
+
+            PositioningModel position = new PositioningModel();
+
+            PositioningModel positioningModel =  positioningRepository.findByLocationCode(pos);
+            //position.setId(positioningModel.get().getId());
+            // Si el primer neumático se actualizó con éxito, procedemos con el segundo.
+            Optional<TireModel> result2 = tireRepository.findById(id2).map(n2 -> {
+                n2.setStatus(TireStatus.IN_USE);
+                n2.setVehicleModel(vehicle);
+                n2.setPositioning(positioningModel);
+                return tireRepository.save(n2);
+            });
+
+            // Devolvemos el segundo resultado si está presente, de lo contrario devolvemos null.
+            return result2.orElse(null);
+        } else {
+            // Si el primer neumático no se pudo actualizar, devolvemos null o lanzamos una excepción según la lógica del negocio.
+            return null;
+        }
+    }
+
 
     /**
      * Deletes a tire record from the system by its ID.

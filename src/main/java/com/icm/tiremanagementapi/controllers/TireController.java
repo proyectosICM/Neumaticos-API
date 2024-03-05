@@ -57,9 +57,9 @@ public class TireController {
      * @return ResponseEntity containing the list of TireModel objects associated with the specified vehicle ID.
      */
     @GetMapping("/vehicle")
-    public ResponseEntity<List<TireModel>> findTiresByVehicleId(@RequestParam Long vehicleId,
+    public ResponseEntity<List<TireModel>> findTiresByVehicleId(
                                                                 @RequestParam("status") TireStatus status) {
-        List<TireModel> tires = tireService.findTiresByVehicleId(vehicleId, status);
+        List<TireModel> tires = tireService.findTiresByVehicleId( status);
         if(tires.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -153,6 +153,22 @@ public class TireController {
         return updatedTire != null ?
                 new ResponseEntity<>(updatedTire, HttpStatus.OK) :
                 ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/changeTire2")
+    public ResponseEntity<TireModel> changeTire(
+            @RequestParam Long id1,
+            @RequestParam Long id2,
+            @RequestParam String pos,
+            @RequestParam Long v) {
+
+        TireModel updatedTire = tireService.changeTire2(id1, id2, pos, v);
+
+        if (updatedTire != null) {
+            return new ResponseEntity<>(updatedTire, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
