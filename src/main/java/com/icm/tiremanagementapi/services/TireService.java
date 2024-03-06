@@ -37,6 +37,7 @@ public class TireService {
      * @return List of TireModel objects.
      */
     public List<TireModel> getAll() {
+
         return tireRepository.findAll();
     }
 
@@ -115,6 +116,9 @@ public class TireService {
                 .map(existingTire -> {
                     existingTire.setCodname(tire.getCodname());
                     existingTire.setStatus(tire.getStatus());
+                    existingTire.setPositioning(tire.getStatus() == TireStatus.FREE ? null : tire.getPositioning());
+                    existingTire.setVehicleModel(tire.getStatus() == TireStatus.FREE ? null : tire.getVehicleModel());
+                    existingTire.setCompanyModel(tire.getCompanyModel());
                     return tireRepository.save(existingTire);
                 })
                 .orElse(null);
@@ -143,38 +147,40 @@ public class TireService {
         return null; // Retorna null si no se cumple ninguna condición
     }
     public TireModel changeTire2(Long id1, Long id2, String pos, Long v) {
-        // Primero, intentamos encontrar y actualizar el primer neumático.
-        Optional<TireModel> result1 = tireRepository.findById(id1).map(
-                n1 -> {
-                    n1.setStatus(TireStatus.FREE);
-                    n1.setVehicleModel(null);
-                    n1.setPositioning(null);
-                    return tireRepository.save(n1);
-                });
+        if(id1 != null && id2 != null) {
+            // Primero, intentamos encontrar y actualizar el primer neumático.
+            TireModel firstTire = tireRepository.findById(id1).orElse(null);
 
-        // Verificamos si el primer neumático fue actualizado con éxito.
-        if (result1.isPresent()) {
-            VehicleModel vehicle = new VehicleModel();
-            vehicle.setId(v);
+            if (firstTire != null) {
+                firstTire.setStatus(TireStatus.FREE);
+                firstTire.setVehicleModel(null);
+                firstTire.setPositioning(null);
+                tireRepository.save(firstTire);
 
-            PositioningModel position = new PositioningModel();
+                // Verificar si el primer neumático se actualizó a FREE correctamente.
+                if (firstTire.getStatus() == TireStatus.FREE) {
+                    VehicleModel vehicle = new VehicleModel();
+                    vehicle.setId(v);
 
-            PositioningModel positioningModel =  positioningRepository.findByLocationCode(pos);
-            //position.setId(positioningModel.get().getId());
-            // Si el primer neumático se actualizó con éxito, procedemos con el segundo.
-            Optional<TireModel> result2 = tireRepository.findById(id2).map(n2 -> {
-                n2.setStatus(TireStatus.IN_USE);
-                n2.setVehicleModel(vehicle);
-                n2.setPositioning(positioningModel);
-                return tireRepository.save(n2);
-            });
+                    PositioningModel positioningModel = positioningRepository.findByLocationCode(pos);
+                    if (positioningModel == null) {
+                        // Manejar el caso en que la posición no se encuentra.
+                        return null;
+                    }
 
-            // Devolvemos el segundo resultado si está presente, de lo contrario devolvemos null.
-            return result2.orElse(null);
-        } else {
-            // Si el primer neumático no se pudo actualizar, devolvemos null o lanzamos una excepción según la lógica del negocio.
-            return null;
+                    // Procedemos con el segundo neumático si el primer neumático fue actualizado correctamente.
+                    return tireRepository.findById(id2).map(n2 -> {
+                        n2.setStatus(TireStatus.IN_USE);
+                        n2.setVehicleModel(vehicle);
+                        n2.setPositioning(positioningModel);
+                        return tireRepository.save(n2);
+                    }).orElse(null);
+                }
+            }
+            // Devolvemos null si el primer neumático no se encuentra o no se actualiza correctamente.
+
         }
+        return null;
     }
 
 
