@@ -85,11 +85,7 @@ public class TireSensorModel {
     @JoinColumn(name = "positioning", nullable = true)
     private PositioningModel positioning;
 
-    /**
-     * Indicates if an alert has been previously generated for this tire,
-     * aiding in alert management and redundancy avoidance.
-     */
-    private Boolean alerted;
+
 
     /**
      * Records the creation timestamp of the tire record, providing audit capabilities.

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,6 +27,10 @@ public class VehicleService {
 
     @Autowired
     private VehicleTypeRepository vehicleTypeRepository;
+
+    public List<VehicleModel> getAll(){
+        return vehicleRepository.findAll();
+    }
 
     /**
      * Retrieves a paginated list of all vehicles in the system.

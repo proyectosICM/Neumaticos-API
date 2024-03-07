@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +21,11 @@ public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
+
+    @GetMapping
+    public List<VehicleModel> getAll(){
+        return vehicleService.getAll();
+    }
 
     /**
      * Fetches a paginated list of all vehicles in the system.
