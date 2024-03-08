@@ -153,7 +153,13 @@ public class VehicleService {
     public VehicleModel updateVehicle(VehicleModel vehicle, Long id) {
         return vehicleRepository.findById(id)
                 .map(existingVehicle -> {
-                    // Add any additional update logic here if needed
+                    existingVehicle.setPlaca(vehicle.getPlaca());
+                    existingVehicle.setVehicleType(vehicle.getVehicleType());
+                    existingVehicle.setCompany(vehicle.getCompany());
+                    existingVehicle.setStandardTemperature(vehicle.getStandardTemperature());
+                    existingVehicle.setStandardPressure(vehicle.getStandardPressure());
+                    existingVehicle.setStatus(vehicle.getStatus());
+
                     return vehicleRepository.save(existingVehicle);
                 })
                 .orElse(null);

@@ -35,7 +35,6 @@ public class VehicleModel {
      * License plate number of the vehicle.
      * It is optional and can be assigned based on specific vehicle types or operational needs.
      */
-    @Null(message = "License plate can be null, assigned based on the vehicle type")
     private String placa;
 
     /**
