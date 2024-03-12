@@ -1,7 +1,11 @@
 package com.icm.tiremanagementapi.controllers;
 
+import com.icm.tiremanagementapi.models.CompanyModel;
 import com.icm.tiremanagementapi.models.ImagesIrregularitiesTireModel;
+import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
+import com.icm.tiremanagementapi.services.CompanyService;
 import com.icm.tiremanagementapi.services.ImagesIrregularitiesTireService;
+import com.icm.tiremanagementapi.services.IrregularitiesTireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +16,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/IIT")
+@RequestMapping("api/IIT")
 public class ImagesIrregularitiesTireController {
     @Autowired
     private ImagesIrregularitiesTireService imagesIrregularitiesTireService;
+
+    @Autowired
+    private IrregularitiesTireService irregularitiesTireService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @GetMapping
     public List<ImagesIrregularitiesTireModel> getAllImages() {
@@ -30,8 +40,27 @@ public class ImagesIrregularitiesTireController {
     }
 
     @PostMapping
-    public ResponseEntity<ImagesIrregularitiesTireModel> saveImage(@RequestBody ImagesIrregularitiesTireModel image,
-                                                                   @RequestParam("file") MultipartFile file){
+    public ResponseEntity<ImagesIrregularitiesTireModel> saveImage(
+            @RequestParam("irregularitiesTireModelId") Long irregularitiesTireModelId,
+            @RequestParam("companyModelId") Long companyModelId,
+            @RequestParam("details") String details,
+            @RequestParam("file") MultipartFile file) {
+
+        // Construir aquí el objeto ImagesIrregularitiesTireModel a partir de los parámetros recibidos
+        ImagesIrregularitiesTireModel image = new ImagesIrregularitiesTireModel();
+        // Suponiendo que tienes los setters adecuados
+
+        IrregularitiesTireModel irregularitiesTire = new IrregularitiesTireModel();
+        irregularitiesTire.setId(irregularitiesTireModelId);
+        Optional<CompanyModel> company = companyService.getById(companyModelId);
+        // company.setId(companyModelId);
+        CompanyModel com = new CompanyModel();
+        com.setId(companyModelId);
+        com.setName(company.get().getName());
+        image.setIrregularitiesTireModel(irregularitiesTire);
+        image.setCompanyModel(com);
+        image.setDetails(details);
+
         ImagesIrregularitiesTireModel data = imagesIrregularitiesTireService.saveImage(image, file);
 
         if (data != null) {
@@ -40,6 +69,8 @@ public class ImagesIrregularitiesTireController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ImagesIrregularitiesTireModel> deleteImage(@PathVariable Long id){

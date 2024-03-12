@@ -7,10 +7,12 @@ import com.icm.tiremanagementapi.repositories.TireSensorRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,10 @@ public class TireSensorService {
 
     @Autowired
     private PositioningRepository positioningRepository;
+
+    @Value("${file.image}")
+    private String basePath;
+
     /**
      * Retrieves a list of all tires in the system.
      *
@@ -261,6 +267,12 @@ public class TireSensorService {
         irregularity.setRecordedPressure(checkResult.getRecordedPressure());
         irregularity.setRecordedBatteryLevel(checkResult.getRecordedBatteryLevel());
         irregularity.setTireSensorModel(tire);
-        irregularitiesTireRepository.save(irregularity);
+        IrregularitiesTireModel data = irregularitiesTireRepository.save(irregularity);
+
+        String directoryPath = basePath + File.separator + data.getCompany().getName() + File.separator + "irregularidades" + File.separator + data.getId();
+        // Crear el directorio
+        File directory = new File(directoryPath);
+        boolean isDirectoryCreated = directory.mkdirs();
+        System.out.println("Hola");
     }
 }

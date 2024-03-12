@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Optional;
 
 /**
@@ -95,10 +96,23 @@ public class IrregularitiesTireService {
      * @return The created IrregularitiesTireModel.
      */
     public IrregularitiesTireModel createIrregularity(IrregularitiesTireModel irregularity) {
-        IrregularitiesTireModel saveData =  irregularitiesTireRepository.save(irregularity);
+        // Guardar la irregularidad en la base de datos
+        IrregularitiesTireModel savedData = irregularitiesTireRepository.save(irregularity);
 
-        directoryService.createDirectoryWithName(basePath, String.valueOf(saveData.getId()));
-        return saveData;
+        if (savedData != null) {
+            // Construir la ruta del directorio basada en la compañía y el ID de la irregularidad
+            String directoryPath = basePath + File.separator + savedData.getCompany().getName() + File.separator + "irregularidades" + File.separator + savedData.getId();
+
+            // Crear el directorio
+            File directory = new File(directoryPath);
+            boolean isDirectoryCreated = directory.mkdirs();
+
+        } else {
+            // Manejar el caso en que la irregularidad no se pudo guardar
+            System.out.println("No se pudo guardar la irregularidad");
+        }
+
+        return savedData;
     }
 
     /**

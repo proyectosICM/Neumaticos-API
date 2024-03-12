@@ -34,7 +34,7 @@ public class DirectoryService {
      * Verifica si un directorio existe en la ruta especificada.
      *
      * @param basePath Ruta base donde se verificará la existencia del directorio.
-     * @param directoryName Nombre del directorio a verificar.
+
      * @return true si el directorio existe, false en caso contrario.
      */
     public boolean doesDirectoryExist(String basePath) {

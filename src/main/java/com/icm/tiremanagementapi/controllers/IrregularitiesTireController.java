@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * Supports operations such as listing, retrieving, creating, updating, and deleting irregularities.
  */
 @RestController
-@RequestMapping("/api/irregularities")
+@RequestMapping("api/irregularities")
 public class IrregularitiesTireController {
     @Autowired
     private IrregularitiesTireService irregularitiesTireService;
