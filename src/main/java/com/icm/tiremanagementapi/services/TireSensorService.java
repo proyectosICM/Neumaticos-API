@@ -183,22 +183,22 @@ public class TireSensorService {
     public TireSensorModel updateProperties(Double temperature, Double pressure, Integer battery, Long idvehicle, Long idtire) {
         VehicleModel vehicle = vehicleRepository.findById(idvehicle)
                 .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
-        TireSensorModel tire = tireSensorRepository.findById(idtire)
+        TireSensorModel sensor = tireSensorRepository.findById(idtire)
                 .orElseThrow(() -> new RuntimeException("Neumático no encontrado"));
 
         // Ejecuta las verificaciones consolidadas y decide sobre la creación de irregularidades
-        CheckResult checkResult = checkAllConditions(temperature, pressure, battery, vehicle, tire);
+        CheckResult checkResult = checkAllConditions(temperature, pressure, battery, vehicle, sensor);
         if (checkResult.isShouldCreateIrregularity()) {
-            createIrregularity(checkResult, tire);
+            createIrregularity(checkResult, sensor);
         }
 
         // Actualiza las propiedades del neumático según los datos recibidos
-        tire.setTemperature(temperature);
-        tire.setBatteryLevel(battery.doubleValue());
-        tire.setPressure(pressure);
+        sensor.setTemperature(temperature);
+        sensor.setBatteryLevel(battery.doubleValue());
+        sensor.setPressure(pressure);
 
         // Guarda el neumático actualizado en la base de datos
-        return tireSensorRepository.save(tire);
+        return tireSensorRepository.save(sensor);
     }
 
 
@@ -247,9 +247,9 @@ public class TireSensorService {
         return result;
     }
 
-    private void createIrregularity(CheckResult checkResult, TireSensorModel tire) {
+    private void createIrregularity(CheckResult checkResult, TireSensorModel sensor) {
         ZonedDateTime tenMinutesAgo = ZonedDateTime.now().minusMinutes(10);
-        List<IrregularitiesTireModel> recentIrregularities = irregularitiesTireRepository.findByNameIrregularityAndTireSensorModelIdAndCreatedAtGreaterThanEqual(checkResult.getIrregularityName(), tire.getId(), tenMinutesAgo);
+        List<IrregularitiesTireModel> recentIrregularities = irregularitiesTireRepository.findByNameIrregularityAndTireSensorModelIdAndCreatedAtGreaterThanEqual(checkResult.getIrregularityName(), sensor.getId(), tenMinutesAgo);
 
         if (!recentIrregularities.isEmpty()) {
             // Existe al menos una incidencia en los últimos 10 minutos con el mismo nombre
@@ -257,22 +257,23 @@ public class TireSensorService {
         }
 
         // No se encontraron incidencias recientes, proceder a crear una nueva
+
         IrregularitiesTireModel irregularity = new IrregularitiesTireModel();
         irregularity.setNameIrregularity(checkResult.getIrregularityName());
         irregularity.setDetailsIrregularity(checkResult.getIrregularityDetail());
-        irregularity.setVehicleModel(tire.getVehicleModel());
-        irregularity.setCompany(tire.getCompany());
+        irregularity.setVehicleModel(sensor.getVehicleModel());
+        irregularity.setCompany(sensor.getCompany());
         irregularity.setStatus(true); // Asumiendo que true indica una irregularidad activa
         irregularity.setRecordedTemperature(checkResult.getRecordedTemperature());
         irregularity.setRecordedPressure(checkResult.getRecordedPressure());
         irregularity.setRecordedBatteryLevel(checkResult.getRecordedBatteryLevel());
-        irregularity.setTireSensorModel(tire);
+        irregularity.setTireSensorModel(sensor);
+        irregularity.setTireModel(sensor.getTireModel());
         IrregularitiesTireModel data = irregularitiesTireRepository.save(irregularity);
 
         String directoryPath = basePath + File.separator + data.getCompany().getName() + File.separator + "irregularidades" + File.separator + data.getId();
         // Crear el directorio
         File directory = new File(directoryPath);
         boolean isDirectoryCreated = directory.mkdirs();
-        System.out.println("Hola");
     }
 }

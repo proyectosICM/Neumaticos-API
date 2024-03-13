@@ -57,8 +57,12 @@ public class IrregularitiesTireModel {
      * Direct association with the tire experiencing the irregularity, essential for identification.
      */
     @ManyToOne
-    @JoinColumn(name = "tire", nullable = false)
+    @JoinColumn(name = "sensor", nullable = false)
     private TireSensorModel tireSensorModel;
+
+    @ManyToOne
+    @JoinColumn(name = "tire", nullable = true)
+    private TireModel tireModel;
 
     /**
      * Indicates the active or inactive status of the irregularity.

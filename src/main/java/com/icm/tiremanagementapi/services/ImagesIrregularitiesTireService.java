@@ -31,6 +31,10 @@ public class ImagesIrregularitiesTireService {
         return imagesIrregularitiesTireRepository.findById(id);
     }
 
+    public List<ImagesIrregularitiesTireModel> getByIrregularityId(Long id){
+        return imagesIrregularitiesTireRepository.findByIrregularitiesTireModelId(id);
+    }
+
     public ImagesIrregularitiesTireModel saveImage(ImagesIrregularitiesTireModel imagesIrregularitiesTireModel, MultipartFile file) {
         String directoryPath = basePath + File.separator + imagesIrregularitiesTireModel.getCompanyModel().getName()
                 + File.separator + "irregularidades" + File.separator + imagesIrregularitiesTireModel.getIrregularitiesTireModel().getId();

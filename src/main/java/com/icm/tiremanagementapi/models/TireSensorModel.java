@@ -85,6 +85,10 @@ public class TireSensorModel {
     @JoinColumn(name = "positioning", nullable = true)
     private PositioningModel positioning;
 
+    @ManyToOne
+    @JoinColumn(name = "tire", nullable = true)
+    private TireModel tireModel;
+
 
 
     /**
