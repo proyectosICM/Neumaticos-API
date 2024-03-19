@@ -112,10 +112,10 @@ public class TireController {
     }
 
     @GetMapping("/findByVehicleModelIdAndPositioningLocationCode")
-    public ResponseEntity<List<TireModel>> findByVehicleModelIdAndId(
+    public ResponseEntity<Optional<TireModel>> findByVehicleModelIdAndId(
             @RequestParam Long vehicleId,
-            @RequestParam String positioning) {
-        List<TireModel> tires = tireService.findByVehicleModelIdAndPositioningLocationCode(vehicleId, positioning);
+            @RequestParam Long positioning) {
+        Optional<TireModel> tires = tireService.findByVehicleModelIdAndPositioningLocationCode(vehicleId, positioning);
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 

@@ -41,7 +41,7 @@ public class TireModel {
 
     @ManyToOne
     @JoinColumn(name = "positioning", nullable = true)
-    private PositioningModel positioning;
+    private PositioningModel positioningModel;
 
     /**
      * Links this tire to a specific vehicle within the system, enabling association between tires and vehicles.

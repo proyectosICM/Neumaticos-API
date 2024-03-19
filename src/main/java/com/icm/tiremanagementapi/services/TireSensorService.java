@@ -6,6 +6,7 @@ import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireSensorRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -128,17 +129,34 @@ public class TireSensorService {
      * @param id   The ID of the tire to update.
      * @return The updated TireModel if the tire with the given ID is found, otherwise null.
      */
-    public TireSensorModel updateTire(TireSensorModel tire, Long id) {
-        return tireSensorRepository.findById(id)
-                .map(existingTire -> {
-                    existingTire.setIdentificationCode(tire.getIdentificationCode());
-                    existingTire.setStatus(tire.getStatus());
-                    existingTire.setVehicleModel(tire.getVehicleModel());
-                    existingTire.setPositioning(tire.getPositioning());
-                    existingTire.setCompany(tire.getCompany());
-                    return tireSensorRepository.save(existingTire);
-                })
-                .orElse(null);
+    public TireSensorModel updateTireSensor(TireSensorModel tireSensor, Long id) {
+        // Verificar si el sensor a actualizar existe
+        TireSensorModel existingTireSensor = tireSensorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Sensor no encontrado con id: " + id));
+
+        // Verificar si hay un sensor anterior en la misma posición y vehículo que deba ser liberado
+        if (tireSensor.getVehicleModel() != null && tireSensor.getPositioning() != null) {
+            Optional<TireSensorModel> oldTireSensor = tireSensorRepository.findByVehicleModelIdAndPositioningId(
+                    tireSensor.getVehicleModel().getId(), tireSensor.getPositioning().getId());
+
+            if (oldTireSensor.isPresent()) {
+                // Liberar el sensor anterior
+                TireSensorModel sensorToFree = oldTireSensor.get();
+                sensorToFree.setPositioning(null);
+                sensorToFree.setVehicleModel(null);
+                sensorToFree.setStatus(false); // Asegúrate de tener una enumeración o valor adecuado para el estado 'libre'
+                tireSensorRepository.save(sensorToFree);
+            }
+        }
+
+        // Actualizar el sensor existente con los nuevos detalles
+        existingTireSensor.setIdentificationCode(tireSensor.getIdentificationCode());
+        existingTireSensor.setStatus(tireSensor.getStatus());
+        existingTireSensor.setPositioning(tireSensor.getPositioning());
+        existingTireSensor.setVehicleModel(tireSensor.getVehicleModel());
+        existingTireSensor.setCompany(tireSensor.getCompany());
+
+        return tireSensorRepository.save(existingTireSensor);
     }
 
     /**

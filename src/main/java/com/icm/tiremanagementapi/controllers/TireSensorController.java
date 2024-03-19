@@ -155,7 +155,7 @@ public class TireSensorController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<TireSensorModel> updateTire(@RequestBody TireSensorModel tireModel, @PathVariable Long id) {
-        TireSensorModel updatedTire = tireSensorService.updateTire(tireModel, id);
+        TireSensorModel updatedTire = tireSensorService.updateTireSensor(tireModel, id);
         return updatedTire != null ?
                 new ResponseEntity<>(updatedTire, HttpStatus.OK) :
                 ResponseEntity.notFound().build();

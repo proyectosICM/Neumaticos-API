@@ -60,4 +60,6 @@ public interface TireSensorRepository extends JpaRepository<TireSensorModel, Lon
      * @return A list of TireModel objects that are associated with the given vehicle and have the specified positioning code.
      */
     List<TireSensorModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicle, String positioning);
+
+    Optional<TireSensorModel> findByVehicleModelIdAndPositioningId(Long vehicle, Long positioning);
 }

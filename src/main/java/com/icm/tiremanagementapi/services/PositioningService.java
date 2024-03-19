@@ -36,6 +36,7 @@ public class PositioningService {
         return positioningRepository.findById(id);
     }
 
+
     public PositioningModel savePositioning(PositioningModel positioning) {
         return positioningRepository.save(positioning);
     }

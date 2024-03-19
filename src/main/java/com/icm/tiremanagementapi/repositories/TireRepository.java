@@ -57,5 +57,5 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
 
     List<TireModel> findByCompanyModelIdAndStatus(Long company, Boolean status);
 
-    List<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, String positioning);
+    Optional<TireModel> findByVehicleModelIdAndPositioningModelId(Long vehicleId, Long positioningId);
 }

@@ -6,6 +6,7 @@ import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,8 +91,8 @@ public class TireService {
         return tireRepository.findByCompanyModelIdAndStatus(companyId, status);
     }
 
-    public List<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, String positioning) {
-        return tireRepository.findByVehicleModelIdAndPositioningLocationCode(vehicleId, positioning);
+    public Optional<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, Long positioning) {
+        return tireRepository.findByVehicleModelIdAndPositioningModelId(vehicleId, positioning);
     }
 
     /**
@@ -112,16 +113,31 @@ public class TireService {
      * @return The updated TireModel if the tire with the given ID is found, otherwise null.
      */
     public TireModel updateTire(TireModel tire, Long id) {
-        return tireRepository.findById(id)
-                .map(existingTire -> {
-                    existingTire.setCodname(tire.getCodname());
-                    existingTire.setStatus(tire.getStatus());
-                    existingTire.setPositioning(tire.getStatus() == TireStatus.FREE ? null : tire.getPositioning());
-                    existingTire.setVehicleModel(tire.getStatus() == TireStatus.FREE ? null : tire.getVehicleModel());
-                    existingTire.setCompanyModel(tire.getCompanyModel());
-                    return tireRepository.save(existingTire);
-                })
-                .orElse(null);
+        // Verificar si el neumático a actualizar existe
+        TireModel existingTire = tireRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Neumático no encontrado con id: " + id));
+
+        // Verificar si hay un neumático anterior que deba ser liberado
+        if (tire.getVehicleModel() != null && tire.getPositioningModel() != null) {
+            Optional<TireModel> oldTire = tireRepository.findByVehicleModelIdAndPositioningModelId(tire.getVehicleModel().getId(), tire.getPositioningModel().getId());
+            if (oldTire.isPresent()) {
+                // Liberar el neumático anterior
+                TireModel tireToFree = oldTire.get();
+                tireToFree.setPositioningModel(null);
+                tireToFree.setVehicleModel(null);
+                tireToFree.setStatus(TireStatus.FREE);
+                tireRepository.save(tireToFree);
+            }
+        }
+
+        // Actualizar el neumático existente con los nuevos detalles
+        existingTire.setCodname(tire.getCodname());
+        existingTire.setStatus(tire.getStatus());
+        existingTire.setPositioningModel(tire.getPositioningModel());
+        existingTire.setVehicleModel(tire.getStatus() == TireStatus.FREE ? null : tire.getVehicleModel());
+        existingTire.setCompanyModel(tire.getCompanyModel());
+
+        return tireRepository.save(existingTire);
     }
 
     public TireModel changeTire(TireModel tire, Long id) {
@@ -130,7 +146,7 @@ public class TireService {
                     .map(existingTire -> {
                         existingTire.setStatus(TireStatus.FREE);
                         existingTire.setVehicleModel(null);
-                        existingTire.setPositioning(null);
+                        existingTire.setPositioningModel(null);
                         return tireRepository.save(existingTire);
                     })
                     .orElse(null);
@@ -139,7 +155,7 @@ public class TireService {
                     .map(existingTire -> {
                         existingTire.setStatus(TireStatus.IN_USE);
                         existingTire.setVehicleModel(tire.getVehicleModel());
-                        existingTire.setPositioning(tire.getPositioning());
+                        existingTire.setPositioningModel(tire.getPositioningModel());
                         return tireRepository.save(existingTire);
                     })
                     .orElse(null);
@@ -154,7 +170,7 @@ public class TireService {
             if (firstTire != null) {
                 firstTire.setStatus(TireStatus.FREE);
                 firstTire.setVehicleModel(null);
-                firstTire.setPositioning(null);
+                firstTire.setPositioningModel(null);
                 tireRepository.save(firstTire);
 
                 // Verificar si el primer neumático se actualizó a FREE correctamente.
@@ -172,7 +188,7 @@ public class TireService {
                     return tireRepository.findById(id2).map(n2 -> {
                         n2.setStatus(TireStatus.IN_USE);
                         n2.setVehicleModel(vehicle);
-                        n2.setPositioning(positioningModel);
+                        n2.setPositioningModel(positioningModel);
                         return tireRepository.save(n2);
                     }).orElse(null);
                 }
