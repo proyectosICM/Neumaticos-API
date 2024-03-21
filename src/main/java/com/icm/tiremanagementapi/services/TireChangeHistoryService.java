@@ -1,12 +1,7 @@
 package com.icm.tiremanagementapi.services;
 
-import com.icm.tiremanagementapi.models.CompanyModel;
 import com.icm.tiremanagementapi.models.TireChangeHistoryModel;
-import com.icm.tiremanagementapi.models.TireSensorModel;
-import com.icm.tiremanagementapi.models.VehicleModel;
 import com.icm.tiremanagementapi.repositories.TireChangeHistoryRepository;
-import com.icm.tiremanagementapi.repositories.TireSensorRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

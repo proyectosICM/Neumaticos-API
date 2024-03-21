@@ -3,6 +3,7 @@ package com.icm.tiremanagementapi.services;
 import com.icm.tiremanagementapi.models.ImagesIrregularitiesTireModel;
 import com.icm.tiremanagementapi.repositories.ImagesIrregularitiesTireRepository;
 import com.icm.tiremanagementapi.services.utils.DirectoryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,11 @@ public class ImagesIrregularitiesTireService {
 
     public List<ImagesIrregularitiesTireModel> getByIrregularityId(Long id){
         return imagesIrregularitiesTireRepository.findByIrregularitiesTireModelId(id);
+    }
+
+    public ImagesIrregularitiesTireModel getImageByImageName(String imageName, Long idIrregularities) {
+        return imagesIrregularitiesTireRepository.findByImageNameAndIrregularitiesTireModelId(imageName,idIrregularities)
+                .orElseThrow(() -> new EntityNotFoundException("Image not found with name: " + imageName));
     }
 
     public ImagesIrregularitiesTireModel saveImage(ImagesIrregularitiesTireModel imagesIrregularitiesTireModel, MultipartFile file) {

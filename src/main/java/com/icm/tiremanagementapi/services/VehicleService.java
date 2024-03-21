@@ -70,7 +70,7 @@ public class VehicleService {
     public Page<VehicleModel> findByCompanyId(Long companyId, int page, int size) {
         if (companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByCompanyId(companyId, pageable);
+            return vehicleRepository.findByCompanyModelId(companyId, pageable);
         } else {
             return Page.empty();
         }
@@ -88,7 +88,7 @@ public class VehicleService {
     public Page<VehicleModel> findByCompanyIdAndStatus(Long companyId, Boolean status, int page, int size) {
         if (companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByCompanyIdAndStatus(companyId, status, pageable);
+            return vehicleRepository.findByCompanyModelIdAndStatus(companyId, status, pageable);
         } else {
             return Page.empty();
         }
@@ -108,7 +108,7 @@ public class VehicleService {
             Long typeId, Boolean status, Long companyId, int page, int size) {
         if (typeId != null && companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByVehicleTypeIdAndStatusAndCompanyId(typeId, status, companyId, pageable);
+            return vehicleRepository.findByVehicleTypeIdAndStatusAndCompanyModelId(typeId, status, companyId, pageable);
         } else {
             return Page.empty();
         }
@@ -126,7 +126,7 @@ public class VehicleService {
     public Page<VehicleModel> findByVehicleTypeIdAndCompanyId(Long vehicleTypeId, Long companyId, int page, int size) {
         if (vehicleTypeId != null && companyId != null) {
             Pageable pageable = PageRequest.of(page, size);
-            return vehicleRepository.findByVehicleTypeIdAndCompanyId(vehicleTypeId, companyId, pageable);
+            return vehicleRepository.findByVehicleTypeIdAndCompanyModelId(vehicleTypeId, companyId, pageable);
         } else {
             return Page.empty();
         }
@@ -155,7 +155,7 @@ public class VehicleService {
                 .map(existingVehicle -> {
                     existingVehicle.setPlaca(vehicle.getPlaca());
                     existingVehicle.setVehicleType(vehicle.getVehicleType());
-                    existingVehicle.setCompany(vehicle.getCompany());
+                    existingVehicle.setCompanyModel(vehicle.getCompanyModel());
                     existingVehicle.setStandardTemperature(vehicle.getStandardTemperature());
                     existingVehicle.setStandardPressure(vehicle.getStandardPressure());
                     existingVehicle.setStatus(vehicle.getStatus());

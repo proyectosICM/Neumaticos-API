@@ -39,6 +39,12 @@ public class ImagesIrregularitiesTireController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<ImagesIrregularitiesTireModel> getImageByImageName(@RequestParam String imageName, @RequestParam Long irregularityId) {
+        ImagesIrregularitiesTireModel image = imagesIrregularitiesTireService.getImageByImageName(imageName,irregularityId);
+        return ResponseEntity.ok(image);
+    }
+
     @GetMapping("/byIrregularities/{id}")
     public ResponseEntity<List<ImagesIrregularitiesTireModel>> getByIrregularities(@PathVariable Long id) {
         List<ImagesIrregularitiesTireModel> images = imagesIrregularitiesTireService.getByIrregularityId(id);

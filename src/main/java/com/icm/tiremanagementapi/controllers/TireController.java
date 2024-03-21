@@ -2,7 +2,6 @@ package com.icm.tiremanagementapi.controllers;
 
 import com.icm.tiremanagementapi.models.TireModel;
 import com.icm.tiremanagementapi.models.TireStatus;
-import com.icm.tiremanagementapi.requests.UpdateTirePropertiesRequest;
 import com.icm.tiremanagementapi.services.TireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -100,6 +99,15 @@ public class TireController {
             @RequestParam(defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page, size);
         Page<TireModel> tires = tireService.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
+    @GetMapping("/findByCompanyModelId")
+    public ResponseEntity<Page<TireModel>> findByCompanyModelId(@RequestParam Long companyId,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<TireModel> tires = tireService.findByCompanyModelId(companyId, pageRequest);
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 

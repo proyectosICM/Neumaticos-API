@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -108,6 +107,8 @@ public class FilesController {
                             .toUriString();
                     map.put("index", i);
                     map.put("url", url);
+                    map.put("name", fileNames.get(i));
+                    //map.put("details")
                     urls.add(map);
                 }
 

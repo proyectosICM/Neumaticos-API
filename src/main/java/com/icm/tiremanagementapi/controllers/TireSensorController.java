@@ -1,6 +1,5 @@
 package com.icm.tiremanagementapi.controllers;
 
-import com.icm.tiremanagementapi.models.TireModel;
 import com.icm.tiremanagementapi.models.TireSensorModel;
 import com.icm.tiremanagementapi.requests.UpdateTirePropertiesRequest;
 import com.icm.tiremanagementapi.services.TireSensorService;
@@ -134,6 +133,16 @@ public class TireSensorController {
         List<TireSensorModel> tires = tireSensorService.findByCompanyModelIdAndStatus(companyId, status);
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
+
+    @GetMapping("/findByCompanyModelId")
+    public ResponseEntity<Page<TireSensorModel>> findByCompanyModelId(@RequestParam Long companyId,
+                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "10") int size){
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<TireSensorModel> tires = tireSensorService.findByCompanyId(companyId, pageable);
+        return new ResponseEntity<>(tires, HttpStatus.OK);
+    }
+
     /**
      * Creates a new tire record in the system.
      *

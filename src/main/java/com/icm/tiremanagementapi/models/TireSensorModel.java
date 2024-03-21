@@ -70,7 +70,7 @@ public class TireSensorModel {
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
-    private CompanyModel company;
+    private CompanyModel companyModel;
 
     /**
      * Status of the tire (active/inactive).

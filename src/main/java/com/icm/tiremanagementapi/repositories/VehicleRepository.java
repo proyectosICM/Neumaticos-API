@@ -14,7 +14,7 @@ public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
      * @param pageable  The pageable information for pagination.
      * @return Page of VehicleModel objects associated with the specified company and matching the given status.
      */
-    Page<VehicleModel> findByCompanyId(Long companyId, Pageable pageable);
+    Page<VehicleModel> findByCompanyModelId(Long companyId, Pageable pageable);
 
     /**
      * Retrieves a paginated list of vehicles associated with a specific company and status.
@@ -24,7 +24,7 @@ public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
      * @param pageable  The pageable information for pagination.
      * @return Page of VehicleModel objects associated with the specified company and matching the given status.
      */
-    Page<VehicleModel> findByCompanyIdAndStatus(Long companyId, Boolean status, Pageable pageable);
+    Page<VehicleModel> findByCompanyModelIdAndStatus(Long companyId, Boolean status, Pageable pageable);
 
     /**
      * Retrieves a paginated list of vehicles based on type, status, and company.
@@ -35,7 +35,7 @@ public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
      * @param pageable    The pageable information for pagination.
      * @return Page of VehicleModel objects based on the specified type, status, and company.
      */
-    Page<VehicleModel> findByVehicleTypeIdAndStatusAndCompanyId(
+    Page<VehicleModel> findByVehicleTypeIdAndStatusAndCompanyModelId(
             Long vehicleType, Boolean status, Long company, Pageable pageable);
 
 
@@ -47,5 +47,5 @@ public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
      * @param pageable    The pageable information for pagination.
      * @return Page of VehicleModel objects associated with the specified type and company.
      */
-    Page<VehicleModel> findByVehicleTypeIdAndCompanyId(Long vehicleType, Long company, Pageable pageable);
+    Page<VehicleModel> findByVehicleTypeIdAndCompanyModelId(Long vehicleType, Long company, Pageable pageable);
 }

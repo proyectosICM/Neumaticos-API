@@ -1,9 +1,5 @@
 package com.icm.tiremanagementapi;
 
-import com.icm.tiremanagementapi.models.CompanyModel;
-import com.icm.tiremanagementapi.models.RoleModel;
-import com.icm.tiremanagementapi.models.UserModel;
-
 import com.icm.tiremanagementapi.mqtt.MqttSubscriber;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icm.tiremanagementapi.models.TireSensorModel;
 import com.icm.tiremanagementapi.services.TireSensorService;
-import com.icm.tiremanagementapi.services.TireService;
-import com.icm.tiremanagementapi.models.TireModel;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttException;

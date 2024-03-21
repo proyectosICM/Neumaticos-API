@@ -1,7 +1,6 @@
 package com.icm.tiremanagementapi.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,7 +42,7 @@ public class VehicleModel {
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
-    private CompanyModel company;
+    private CompanyModel companyModel;
 
     /**
      * Categorizes the vehicle into a specific type, such as a truck, forklift, etc.,

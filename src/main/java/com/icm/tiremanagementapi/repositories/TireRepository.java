@@ -1,7 +1,6 @@
 package com.icm.tiremanagementapi.repositories;
 
 import com.icm.tiremanagementapi.models.TireModel;
-import com.icm.tiremanagementapi.models.TireSensorModel;
 import com.icm.tiremanagementapi.models.TireStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,4 +57,6 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
     List<TireModel> findByCompanyModelIdAndStatus(Long company, Boolean status);
 
     Optional<TireModel> findByVehicleModelIdAndPositioningModelId(Long vehicleId, Long positioningId);
+
+    Page<TireModel> findByCompanyModelId(Long companyId, Pageable pageable);
 }

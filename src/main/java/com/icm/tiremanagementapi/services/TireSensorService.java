@@ -1,11 +1,14 @@
 package com.icm.tiremanagementapi.services;
 
-import com.icm.tiremanagementapi.models.*;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireSensorRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
+import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
+import com.icm.tiremanagementapi.models.PositioningModel;
+import com.icm.tiremanagementapi.models.TireSensorModel;
+import com.icm.tiremanagementapi.models.VehicleModel;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +47,7 @@ public class TireSensorService {
         return tireSensorRepository.findAll();
     }
     public List<TireSensorModel> findByCompanyModelIdAndStatus(Long companyId, Boolean status) {
-        return tireSensorRepository.findByCompanyIdAndStatus(companyId, status);
+        return tireSensorRepository.findByCompanyModelIdAndStatus(companyId, status);
     }
     /**
      * Retrieves a specific tire by its ID.
@@ -112,6 +115,10 @@ public class TireSensorService {
         return tireSensorRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
 
+    public Page<TireSensorModel> findByCompanyId(Long companyId, Pageable pageable) {
+        return tireSensorRepository.findByCompanyModelId(companyId, pageable);
+    }
+
     /**
      * Creates a new tire record in the system.
      *
@@ -125,7 +132,6 @@ public class TireSensorService {
     /**
      * Updates an existing tire record in the system.
      *
-     * @param tire The updated TireModel.
      * @param id   The ID of the tire to update.
      * @return The updated TireModel if the tire with the given ID is found, otherwise null.
      */
@@ -154,7 +160,7 @@ public class TireSensorService {
         existingTireSensor.setStatus(tireSensor.getStatus());
         existingTireSensor.setPositioning(tireSensor.getPositioning());
         existingTireSensor.setVehicleModel(tireSensor.getVehicleModel());
-        existingTireSensor.setCompany(tireSensor.getCompany());
+        existingTireSensor.setCompanyModel(tireSensor.getCompanyModel());
 
         return tireSensorRepository.save(existingTireSensor);
     }
@@ -280,7 +286,7 @@ public class TireSensorService {
         irregularity.setNameIrregularity(checkResult.getIrregularityName());
         irregularity.setDetailsIrregularity(checkResult.getIrregularityDetail());
         irregularity.setVehicleModel(sensor.getVehicleModel());
-        irregularity.setCompany(sensor.getCompany());
+        irregularity.setCompany(sensor.getCompanyModel());
         irregularity.setStatus(true); // Asumiendo que true indica una irregularidad activa
         irregularity.setRecordedTemperature(checkResult.getRecordedTemperature());
         irregularity.setRecordedPressure(checkResult.getRecordedPressure());

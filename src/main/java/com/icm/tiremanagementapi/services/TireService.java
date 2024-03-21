@@ -1,18 +1,19 @@
 package com.icm.tiremanagementapi.services;
 
-import com.icm.tiremanagementapi.models.*;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
-import com.icm.tiremanagementapi.requests.CheckResult;
+import com.icm.tiremanagementapi.models.PositioningModel;
+import com.icm.tiremanagementapi.models.TireModel;
+import com.icm.tiremanagementapi.models.TireStatus;
+import com.icm.tiremanagementapi.models.VehicleModel;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,6 +94,10 @@ public class TireService {
 
     public Optional<TireModel> findByVehicleModelIdAndPositioningLocationCode(Long vehicleId, Long positioning) {
         return tireRepository.findByVehicleModelIdAndPositioningModelId(vehicleId, positioning);
+    }
+
+    public Page<TireModel> findByCompanyModelId(Long companyId, Pageable pageable) {
+        return tireRepository.findByCompanyModelId(companyId, pageable);
     }
 
     /**
