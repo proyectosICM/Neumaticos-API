@@ -1,4 +1,4 @@
-package com.icm.tiremanagementapi;
+package com.icm.tiremanagementapi; 	
 
 import com.icm.tiremanagementapi.mqtt.MqttSubscriber;
 import org.springframework.boot.SpringApplication;
@@ -41,7 +41,7 @@ public class TireManagementApiApplication {
 		return args -> {
 			CompanyModel empresa = new CompanyModel();
 			empresa.setId(1L);
-
+git
 			RoleModel rol = new RoleModel();
 			rol.setId(1L);
 

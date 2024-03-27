@@ -128,6 +128,10 @@ public class VehicleController {
         return new ResponseEntity<>(vehicles, HttpStatus.OK);
     }
 
+    @GetMapping("/findByPlaca")
+    public ResponseEntity<?> getVehicleByPlaca(@RequestParam String placa) {
+        return vehicleService.getVehicleByPlaca(placa);
+    }
 
     /**
      * Creates a new vehicle record in the system.

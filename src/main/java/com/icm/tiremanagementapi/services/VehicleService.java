@@ -5,6 +5,8 @@ import com.icm.tiremanagementapi.repositories.CompanyRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.repositories.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -132,6 +134,15 @@ public class VehicleService {
         }
     }
 
+    public ResponseEntity<VehicleModel> getVehicleByPlaca(String placa) {
+        try {
+            VehicleModel vehicle = vehicleRepository.findByPlaca(placa)
+                    .orElseThrow(() -> new RuntimeException("Vehículo no encontrado con la placa: " + placa));
+            return ResponseEntity.ok(vehicle);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     /**
      * Creates a new vehicle record in the system.
@@ -140,9 +151,11 @@ public class VehicleService {
      * @return The created VehicleModel.
      */
     public VehicleModel createVehicle(VehicleModel vehicle) {
+        if (vehicleRepository.findByPlaca(vehicle.getPlaca()).isPresent()) {
+            throw new RuntimeException("Ya existe un vehículo con la placa: " + vehicle.getPlaca());
+        }
         return vehicleRepository.save(vehicle);
     }
-
     /**
      * Updates an existing vehicle record in the system.
      *

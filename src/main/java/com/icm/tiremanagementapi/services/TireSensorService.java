@@ -18,13 +18,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TireSensorService {
     @Autowired
-    TireSensorRepository tireSensorRepository;
+    private TireSensorRepository tireSensorRepository;
 
     @Autowired
     private VehicleRepository vehicleRepository;
@@ -78,7 +79,9 @@ public class TireSensorService {
      * @return List of TireModel objects associated with the specified vehicle ID.
      */
     public List<TireSensorModel> findTiresByVehicleId(Long vehicleId) {
-        return tireSensorRepository.findByVehicleModelId(vehicleId);
+        List<TireSensorModel> tires = tireSensorRepository.findByVehicleModelId(vehicleId);
+        tires.sort(Comparator.comparing(tire -> tire.getPositioning().getId()));
+        return tires;
     }
 
     /**

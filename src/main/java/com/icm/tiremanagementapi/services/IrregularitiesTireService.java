@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -77,6 +78,12 @@ public class IrregularitiesTireService {
     public Page<IrregularitiesTireModel> findRecentIrregularitiesByVehicleModelId(Long vehicleModelId) {
         Pageable topSix = PageRequest.of(0, 6, Sort.by(Sort.Direction.DESC, "createdAt"));
         return irregularitiesTireRepository.findByVehicleModelIdOrderByCreatedAtDesc(vehicleModelId, topSix);
+    }
+
+    public List<IrregularitiesTireModel> findAndSortIrregularities(Long companyId, Long vehicleId) {
+        List<IrregularitiesTireModel> irregularities = irregularitiesTireRepository.findByCompanyIdAndVehicleModelId(companyId, vehicleId);
+        irregularities.sort((i1, i2) -> i2.getId().compareTo(i1.getId()));
+        return irregularities;
     }
 
     /**

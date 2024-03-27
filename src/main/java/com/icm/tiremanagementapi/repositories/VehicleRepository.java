@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
 @Repository
 public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
     /**
@@ -48,4 +51,6 @@ public interface VehicleRepository extends JpaRepository<VehicleModel, Long> {
      * @return Page of VehicleModel objects associated with the specified type and company.
      */
     Page<VehicleModel> findByVehicleTypeIdAndCompanyModelId(Long vehicleType, Long company, Pageable pageable);
+
+    Optional<VehicleModel> findByPlaca(String placa);
 }

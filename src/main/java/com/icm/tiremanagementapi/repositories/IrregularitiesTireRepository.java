@@ -31,6 +31,7 @@ public interface IrregularitiesTireRepository extends JpaRepository<Irregulariti
      * @return Page of IrregularitiesTireModel objects associated with the specified company and vehicle.
      */
     Page<IrregularitiesTireModel> findByCompanyIdAndVehicleModelId(Long companyId, Long vehicleId, Pageable pageable);
+    List<IrregularitiesTireModel> findByCompanyIdAndVehicleModelId(Long companyId, Long vehicleId);
 
     /**
      * Retrieves the 6 most recent irregularities for a specific vehicle model.

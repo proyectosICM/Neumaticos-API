@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Handles HTTP requests related to tire irregularities.
  * Supports operations such as listing, retrieving, creating, updating, and deleting irregularities.
@@ -75,6 +77,20 @@ public class IrregularitiesTireController {
     public ResponseEntity<Page<IrregularitiesTireModel>> getRecentIrregularitiesByVehicleModelId(@PathVariable Long vehicleModelId) {
         Page<IrregularitiesTireModel> page = irregularitiesTireService.findRecentIrregularitiesByVehicleModelId(vehicleModelId);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/companyAndVehicleList")
+    public ResponseEntity<List<IrregularitiesTireModel>> getSortedIrregularities(
+            @RequestParam Long companyId,
+            @RequestParam Long vehicleId) {
+
+        List<IrregularitiesTireModel> sortedIrregularities = irregularitiesTireService.findAndSortIrregularities(companyId, vehicleId);
+
+        if (sortedIrregularities.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(sortedIrregularities, HttpStatus.OK);
     }
 
     /**
