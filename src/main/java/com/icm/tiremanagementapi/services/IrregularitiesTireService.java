@@ -1,5 +1,7 @@
 package com.icm.tiremanagementapi.services;
 
+import com.icm.tiremanagementapi.controllers.MailController;
+import com.icm.tiremanagementapi.domain.EmailDTO;
 import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.services.utils.DirectoryService;
@@ -25,6 +27,9 @@ public class IrregularitiesTireService {
     private IrregularitiesTireRepository irregularitiesTireRepository;
     @Autowired
     private DirectoryService directoryService;
+
+    @Autowired
+    private MailController mailController;
 
     @Value("${file.image}")
     private String basePath;
@@ -107,12 +112,14 @@ public class IrregularitiesTireService {
         IrregularitiesTireModel savedData = irregularitiesTireRepository.save(irregularity);
 
         if (savedData != null) {
+
             // Construir la ruta del directorio basada en la compañía y el ID de la irregularidad
             String directoryPath = basePath + File.separator + savedData.getCompany().getName() + File.separator + "irregularidades" + File.separator + savedData.getId();
 
             // Crear el directorio
             File directory = new File(directoryPath);
             boolean isDirectoryCreated = directory.mkdirs();
+
 
         } else {
             // Manejar el caso en que la irregularidad no se pudo guardar

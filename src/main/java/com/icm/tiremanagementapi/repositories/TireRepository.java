@@ -22,7 +22,7 @@ public interface TireRepository extends JpaRepository<TireModel, Long> {
      * @param codename The identification code of the tire to retrieve.
      * @return Optional containing the TireModel if found, otherwise empty.
      */
-    Optional<TireModel> findByCodname(String codename);
+    Optional<TireModel> findByCodnameAndCompanyModelIdAndStatus(String codname, Long companyModelId, TireStatus status);
 
     /**
      * Finds all tires associated with a specific vehicle using pagination.

@@ -1,5 +1,6 @@
 package com.icm.tiremanagementapi.security;
 
+import com.icm.tiremanagementapi.config.WebConfig;
 import com.icm.tiremanagementapi.security.filtrers.JwtAuthenticationFilter;
 import com.icm.tiremanagementapi.security.filtrers.JwtAuthorizationFilter;
 import com.icm.tiremanagementapi.security.jwt.JwtUtils;

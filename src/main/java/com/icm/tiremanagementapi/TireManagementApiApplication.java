@@ -42,6 +42,7 @@ public class TireManagementApiApplication {
 			CompanyModel empresa = new CompanyModel();
 			empresa.setId(1L);
 git
+
 			RoleModel rol = new RoleModel();
 			rol.setId(1L);
 

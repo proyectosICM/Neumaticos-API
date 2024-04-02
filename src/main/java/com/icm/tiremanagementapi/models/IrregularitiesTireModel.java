@@ -54,12 +54,15 @@ public class IrregularitiesTireModel {
     private CompanyModel company;
 
     /**
-     * Direct association with the tire experiencing the irregularity, essential for identification.
+     * Sensor associated with the irregularity
      */
     @ManyToOne
     @JoinColumn(name = "sensor", nullable = false)
     private TireSensorModel tireSensorModel;
 
+    /**
+     * Tire associated with the irregularity
+     */
     @ManyToOne
     @JoinColumn(name = "tire", nullable = true)
     private TireModel tireModel;
@@ -75,14 +78,12 @@ public class IrregularitiesTireModel {
     private Double recordedTemperature;
 
     /**
-     * Captures the pressure level of the tire at the time of the irregularity,
-     * essential for understanding pressure-related issues.
+     * Pressure at which the irregularity was recorded, relevant for pressure-specific issues.
      */
     private Double recordedPressure;
 
     /**
-     * Logs the battery level of the monitoring device at the time the irregularity was recorded,
-     * relevant for device performance assessment.
+     * Battery at which the irregularity was recorded, relevant for battery-specific issues.
      */
     private Double recordedBatteryLevel;
 

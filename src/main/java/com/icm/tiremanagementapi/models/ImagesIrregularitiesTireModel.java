@@ -49,7 +49,7 @@ public class ImagesIrregularitiesTireModel {
     private IrregularitiesTireModel irregularitiesTireModel;
 
     /**
-     * Irregularity associated with the image
+     * Company associated with the image
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = true)

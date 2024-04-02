@@ -34,6 +34,13 @@ public class TireController {
         return tireService.getAll();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<TireModel> findByCodnameAndCompanyModelId(@RequestParam String codname, @RequestParam Long companyModelId) {
+        Optional<TireModel> tire = tireService.findByCodnameAndCompanyModelIdAndStatus(codname, companyModelId);
+        return tire.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
     /**
      * Retrieves a specific tire by its ID.
      *

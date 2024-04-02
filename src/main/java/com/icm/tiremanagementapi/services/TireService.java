@@ -33,6 +33,11 @@ public class TireService {
 
     @Autowired
     private PositioningRepository positioningRepository;
+
+    public Optional<TireModel> findByCodnameAndCompanyModelIdAndStatus(String codname, Long companyModelId) {
+        return tireRepository.findByCodnameAndCompanyModelIdAndStatus(codname, companyModelId, TireStatus.FREE);
+    }
+
     /**
      * Retrieves a list of all tires in the system.
      *

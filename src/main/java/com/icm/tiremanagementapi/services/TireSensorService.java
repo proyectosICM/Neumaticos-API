@@ -1,19 +1,21 @@
 package com.icm.tiremanagementapi.services;
 
+import com.icm.tiremanagementapi.controllers.MailController;
+import com.icm.tiremanagementapi.controllers.RoleController;
+import com.icm.tiremanagementapi.controllers.UserController;
+import com.icm.tiremanagementapi.domain.EmailDTO;
+import com.icm.tiremanagementapi.models.*;
 import com.icm.tiremanagementapi.repositories.IrregularitiesTireRepository;
 import com.icm.tiremanagementapi.repositories.PositioningRepository;
 import com.icm.tiremanagementapi.repositories.TireSensorRepository;
 import com.icm.tiremanagementapi.repositories.VehicleRepository;
 import com.icm.tiremanagementapi.requests.CheckResult;
-import com.icm.tiremanagementapi.models.IrregularitiesTireModel;
-import com.icm.tiremanagementapi.models.PositioningModel;
-import com.icm.tiremanagementapi.models.TireSensorModel;
-import com.icm.tiremanagementapi.models.VehicleModel;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -29,6 +31,14 @@ public class TireSensorService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private UserController userController;
+
+    @Autowired
+    private MailController mailController;
+
+    @Autowired
+    private RoleController roleController;
 
     @Autowired
     private IrregularitiesTireRepository irregularitiesTireRepository;
@@ -302,5 +312,27 @@ public class TireSensorService {
         // Crear el directorio
         File directory = new File(directoryPath);
         boolean isDirectoryCreated = directory.mkdirs();
+        sendEmailForIrregularity(irregularity);
+    }
+
+    private void sendEmailForIrregularity(IrregularitiesTireModel irregularity) {
+        // Construir el cuerpo del correo electrónico
+        String emailBody = "Se ha creado una nueva irregularidad con el siguiente detalle:\n" +
+                "Nombre de la irregularidad: " + irregularity.getNameIrregularity() + "\n" +
+                "Descripción: " + irregularity.getDetailsIrregularity();
+
+
+
+        ResponseEntity<List<String>> response = userController.getEmailsByCompanyAndRole(
+                irregularity.getCompany().getId(), 3L, 4L);
+
+        // Crear un objeto EmailDTO con la información necesaria
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setToUser(new String[]{"es123y123@gmail.com","eduardo.aguilar.ant@gmail.com" });
+        emailDTO.setSubject("Nueva irregularidad detectada " + irregularity.getNameIrregularity() );
+        emailDTO.setMessage(emailBody);
+
+        // Enviar correo electrónico
+        mailController.receiveRequestEmail(emailDTO);
     }
 }

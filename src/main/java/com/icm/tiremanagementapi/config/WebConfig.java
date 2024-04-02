@@ -1,4 +1,4 @@
-package com.icm.tiremanagementapi.security;
+package com.icm.tiremanagementapi.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

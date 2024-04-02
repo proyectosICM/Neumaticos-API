@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,21 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    public List<String> getEmailsByCompanyAndRole(Long companyId, Long roleId1, Long roleId2) {
+        // Obtener la lista de usuarios por compañía y rol
+        List<UserModel> users = userRepository.findByCompanyIdAndRoleIdIn(companyId, List.of(roleId1, roleId2));
+
+        // Inicializar una lista para almacenar los correos electrónicos
+        List<String> emails = new ArrayList<>();
+
+        // Iterar sobre la lista de usuarios y agregar los correos electrónicos a la lista
+        for (UserModel user : users) {
+            emails.add(user.getEmail());
+        }
+
+        return emails;
+    }
 
     /**
      * Retrieves a paginated list of all users in the system.

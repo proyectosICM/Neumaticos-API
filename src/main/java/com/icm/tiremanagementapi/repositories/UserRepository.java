@@ -82,4 +82,13 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
      * @return Page of UserModel objects associated with the specified company and status.
      */
     Page<UserModel> findByCompanyIdAndStatus(Long companyId, Boolean status, Pageable pageable);
+
+    /**
+     * Busca usuarios por el ID de la compañía y los IDs de los roles.
+     *
+     * @param companyId El ID de la compañía.
+     * @param roleIds   Una lista de IDs de roles.
+     * @return Una lista de UserModel que cumplen con los criterios de búsqueda.
+     */
+    List<UserModel> findByCompanyIdAndRoleIdIn(Long companyId, List<Long> roleIds);
 }

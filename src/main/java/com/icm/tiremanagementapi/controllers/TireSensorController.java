@@ -197,7 +197,7 @@ public class TireSensorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PutMapping("/updateProperties")
-    public ResponseEntity<TireSensorModel> updateTireProperties(@RequestBody UpdateTirePropertiesRequest request) {
+    public ResponseEntity<?> updateTireProperties(@RequestBody UpdateTirePropertiesRequest request) {
         try {
             TireSensorModel updatedTire = tireSensorService.updateProperties(
                     request.getTemperature(),
@@ -208,7 +208,9 @@ public class TireSensorController {
             );
             return ResponseEntity.ok(updatedTire);
         } catch (RuntimeException ex) {
-            return ResponseEntity.notFound().build();
+            // return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error " + ex.getMessage());
         }
     }
 }

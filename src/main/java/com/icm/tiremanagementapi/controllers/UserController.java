@@ -31,6 +31,16 @@ public class UserController {
     @Autowired
     private CompanyService companyService;
 
+
+    @GetMapping("/emailsList/{companyId}/{roleId1}/{roleId2}")
+    public ResponseEntity<List<String>> getEmailsByCompanyAndRole(
+            @PathVariable Long companyId,
+            @PathVariable Long roleId1,
+            @PathVariable Long roleId2) {
+        List<String> emails = userService.getEmailsByCompanyAndRole(companyId, roleId1, roleId2);
+        return ResponseEntity.ok(emails);
+    }
+
     /**
      * Fetches a list of all users in the system.
      *
