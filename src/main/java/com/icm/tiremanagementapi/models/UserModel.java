@@ -12,12 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-/**
- * Represents a user within the system.
- * This class encapsulates all relevant information about system users, including credentials,
- * personal information, and their associated roles and companies. It is fundamental for managing
- * access control and personalizing user experiences within the application.
- */
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -76,8 +71,7 @@ public class UserModel {
     private RoleModel role;
 
     /**
-     * Associates the user with a company and depending on their role,
-     * they will have control over certain company resources
+     * Company associated with the user
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
@@ -89,15 +83,14 @@ public class UserModel {
     private Boolean status;
 
     /**
-     * Timestamp marking the creation of the user record, used for auditing and historical tracking.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * Timestamp of the last update to the user record, providing insights into the latest modifications.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

@@ -11,10 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * This model is used to store tire irregularities, and a new record is automatically created through a service
- * whenever irregular changes in temperature, pressure, or battery are detected.
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -28,6 +24,7 @@ public class IrregularitiesTireModel {
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     /**
      * Descriptive name of the irregularity, summarizing the nature of the issue for quick reference.
      */
@@ -68,7 +65,7 @@ public class IrregularitiesTireModel {
     private TireModel tireModel;
 
     /**
-     * Indicates the active or inactive status of the irregularity.
+     * Indicates whether the irregularity has been reviewed or not
      */
     private Boolean status;
 

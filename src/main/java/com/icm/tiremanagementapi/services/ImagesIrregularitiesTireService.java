@@ -24,20 +24,20 @@ public class ImagesIrregularitiesTireService {
     @Value("${file.image}")
     private String basePath;
 
-    public List<ImagesIrregularitiesTireModel> getAllImages(){
-        return imagesIrregularitiesTireRepository.findAll();
-    }
-
-    public Optional<ImagesIrregularitiesTireModel> getImageById(Long id){
+    public Optional<ImagesIrregularitiesTireModel> findById(Long id){
         return imagesIrregularitiesTireRepository.findById(id);
     }
 
-    public List<ImagesIrregularitiesTireModel> getByIrregularityId(Long id){
+    public List<ImagesIrregularitiesTireModel> findAll(){
+        return imagesIrregularitiesTireRepository.findAll();
+    }
+
+    public List<ImagesIrregularitiesTireModel> findByIrregularitiesTireModelId(Long id){
         return imagesIrregularitiesTireRepository.findByIrregularitiesTireModelId(id);
     }
 
-    public ImagesIrregularitiesTireModel getImageByImageName(String imageName, Long idIrregularities) {
-        return imagesIrregularitiesTireRepository.findByImageNameAndIrregularitiesTireModelId(imageName,idIrregularities)
+    public ImagesIrregularitiesTireModel findByImageNameAndIrregularitiesTireModelId(String imageName, Long irregularitiesId) {
+        return imagesIrregularitiesTireRepository.findByImageNameAndIrregularitiesTireModelId(imageName, irregularitiesId)
                 .orElseThrow(() -> new EntityNotFoundException("Image not found with name: " + imageName));
     }
 

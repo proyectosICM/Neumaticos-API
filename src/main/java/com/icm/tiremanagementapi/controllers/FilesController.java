@@ -32,7 +32,7 @@ public class FilesController {
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> serveImage(@PathVariable String filename, @RequestParam Long company, @RequestParam String irregularity) {
         try {
-            Optional<CompanyModel> companyModel = companyService.getById(company);
+            Optional<CompanyModel> companyModel = companyService.findById(company);
             // Construir la ruta personalizada usando los parámetros company e irregularity
             String fullPath = pathimg + "/" + companyModel.get().getName() + "/" + "irregularidades" + "/" + irregularity + "/" + filename;
 
@@ -55,7 +55,7 @@ public class FilesController {
     @GetMapping("/AllNamesimages")
     public ResponseEntity<List<String>> serveNameImages(@RequestParam Long company, @RequestParam String irregularity) {
         try {
-            Optional<CompanyModel> companyModel = companyService.getById(company);
+            Optional<CompanyModel> companyModel = companyService.findById(company);
             String directoryPath = pathimg + "/" + companyModel.get().getName() + "/" + "irregularidades" + "/" + irregularity;
 
             Path dir = Paths.get(directoryPath);
@@ -81,7 +81,7 @@ public class FilesController {
     @GetMapping("/allImages")
     public ResponseEntity<List<Map<String, Object>>> serveAllImages(@RequestParam Long company, @RequestParam String irregularity) {
         try {
-            Optional<CompanyModel> companyModel = companyService.getById(company);
+            Optional<CompanyModel> companyModel = companyService.findById(company);
             if (!companyModel.isPresent()) {
                 throw new RuntimeException("La compañía no existe: " + company);
             }

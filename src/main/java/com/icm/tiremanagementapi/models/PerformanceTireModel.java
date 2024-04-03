@@ -12,9 +12,6 @@ import javax.validation.constraints.DecimalMin;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * This model is used to store the performance of tires over time and is utilized to display performance in charts.
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -64,15 +61,15 @@ public class PerformanceTireModel {
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
-    private CompanyModel company;
+    private CompanyModel companyModel;
 
     /**
      * Reference to the tire experiencing the performance.
      * This direct association is crucial for pinpointing the specific tire involved in the performance.
      */
     @ManyToOne
-    @JoinColumn(name = "tire", nullable = false)
-    private TireModel tire;
+    @JoinColumn(name = "sensor", nullable = false)
+    private TireSensorModel tireSensorModel;
 
     /**
      * Timestamps for recording the creation and last update times of the record.

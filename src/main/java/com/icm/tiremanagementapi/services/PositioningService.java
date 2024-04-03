@@ -22,12 +22,6 @@ public class PositioningService {
         return positioningRepository.findAll();
     }
 
-    /**
-     * Retrieves all tire positions associated with a specific vehicle type.
-     *
-     * @param vehicleTypeId The ID of the vehicle type for which to retrieve tire positions.
-     * @return A list of PositioningModel objects.
-     */
     public List<PositioningModel> findPositioningsByVehicleTypeId(Long vehicleTypeId) {
         return positioningRepository.findByVehicleTypeId(vehicleTypeId);
     }
@@ -36,7 +30,6 @@ public class PositioningService {
         return positioningRepository.findById(id);
     }
 
-
     public PositioningModel savePositioning(PositioningModel positioning) {
         return positioningRepository.save(positioning);
     }
@@ -44,6 +37,4 @@ public class PositioningService {
     public void deletePositioning(Long id) {
         positioningRepository.deleteById(id);
     }
-
-    // Agrega aquí cualquier otro método de servicio que necesites
 }

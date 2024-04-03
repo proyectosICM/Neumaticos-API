@@ -59,14 +59,14 @@ public class TireSensorModel {
     private Double batteryLevel;
 
     /**
-     * Links this tire to a specific vehicle within the system, enabling association between tires and vehicles.
+     * Vehicle associated with the sensor
      */
     @ManyToOne
     @JoinColumn(name = "vehicle", nullable = true)
     private VehicleModel vehicleModel;
 
     /**
-     * Associates the tire with a company, reflecting ownership or responsibility for maintenance.
+     * Company associated with the tire
      */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
@@ -85,22 +85,22 @@ public class TireSensorModel {
     @JoinColumn(name = "positioning", nullable = true)
     private PositioningModel positioning;
 
+    /**
+     * Tire associated with the sensor
+     */
     @ManyToOne
     @JoinColumn(name = "tire", nullable = true)
     private TireModel tireModel;
 
-
-
     /**
-     * Records the creation timestamp of the tire record, providing audit capabilities.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * Records the last update timestamp of the tire record, facilitating tracking of changes over time.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

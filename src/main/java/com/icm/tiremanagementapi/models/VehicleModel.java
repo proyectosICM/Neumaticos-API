@@ -10,12 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * Represents a vehicle within the system.
- * It encapsulates detailed information about vehicles, including their identification, associated company,
- * vehicle type, and operational status. This class also defines standard temperature and pressure settings
- * for tires, aiding in monitoring and maintenance routines.
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -68,16 +62,14 @@ public class VehicleModel {
     private Double standardPressure;
 
     /**
-     * Timestamp that marks the creation of the vehicle record, used for auditing and historical tracking.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * Timestamp of the last update of the vehicle registration,
-     * which provides information about the latest modifications.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

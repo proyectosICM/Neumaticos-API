@@ -101,19 +101,6 @@ public class WebSecurityConfig {
                 .build();
     }
 
-
-    /*
-        @Bean
-        UserDetailsService userDetailsService(){
-            InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-            manager.createUser(User.withUsername("Eduardo")
-                    .password(passwordEncoder().encode("1234"))
-                    .roles()
-                    .build());
-            return manager;
-        }
-
-    */
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

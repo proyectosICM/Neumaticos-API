@@ -13,11 +13,6 @@ import javax.validation.constraints.Size;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * Defines the categories of vehicles recognized within the Tire Management System.
- * This entity classifies different types of vehicles, facilitating targeted management strategies
- * and maintenance routines specific to each vehicle category.
- */
 @Entity
 @Data
 @Builder

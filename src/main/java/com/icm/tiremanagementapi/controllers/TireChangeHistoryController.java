@@ -15,16 +15,16 @@ public class TireChangeHistoryController {
     @Autowired
     private TireChangeHistoryService tireChangeHistoryService;
 
-    @GetMapping
-    public ResponseEntity<List<TireChangeHistoryModel>> getAllTireChangeHistories() {
-        return new ResponseEntity<>(tireChangeHistoryService.getAll(), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<TireChangeHistoryModel> getTireChangeHistoryById(@PathVariable Long id) {
-        return tireChangeHistoryService.getById(id)
+    public ResponseEntity<TireChangeHistoryModel> findById(@PathVariable Long id) {
+        return tireChangeHistoryService.findById(id)
                 .map(tireChangeHistory -> new ResponseEntity<>(tireChangeHistory, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TireChangeHistoryModel>> findAll() {
+        return new ResponseEntity<>(tireChangeHistoryService.findAll(), HttpStatus.OK);
     }
 
 /*

@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-/**
- * Defines the access control roles within the Tire Management System.
- * Each role encapsulates a set of permissions, determining what actions a user can perform.
- * This enables fine-grained access control and customization of user capabilities based on their responsibilities.
- */
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -19,8 +15,7 @@ import javax.validation.constraints.Size;
 @Table(name = "role")
 public class RoleModel {
     /**
-     * Unique identifier for the role, serving as the primary key within the database.
-     * This ID facilitates efficient indexing and retrieval of role records.
+     * Identifier code that auto-increments with the creation of a record.
      */
     @Id
     @Column(unique = true, nullable = false)

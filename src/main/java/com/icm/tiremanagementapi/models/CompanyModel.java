@@ -11,15 +11,6 @@ import javax.validation.constraints.Size;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * Entity representation of a Company within the Tire Management System.
- * This class models the core attributes and behaviors of a company, including its identification,
- * name, and operational status. Companies are central to the application, serving as the primary
- * organizational unit under which vehicles, tires, and related transactions are grouped.
- * The status attribute determines the company's availability for new transactions,
- * where active companies can engage in the system's operations, and inactive ones are considered
- * dormant or archived. The creation and update timestamps provide audit trails for data governance.
- */
 @Entity
 @Data
 @AllArgsConstructor

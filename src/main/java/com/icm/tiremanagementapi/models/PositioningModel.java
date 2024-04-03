@@ -9,10 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.ZonedDateTime;
 
-/**
- * Represents the positioning of a tire on a vehicle within the system.
- * This can include positions such as front-left, front-right, rear-left, rear-right, or spare.
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,7 +16,7 @@ import java.time.ZonedDateTime;
 @Table(name = "positioning")
 public class PositioningModel {
     /**
-     * Unique identifier for the positioning record, automatically generated to ensure uniqueness within the database.
+     * Identifier code that auto-increments with the creation of a record.
      */
     @Id
     @Column(unique = true, nullable = false)
@@ -62,15 +58,14 @@ public class PositioningModel {
     private VehicleTypeModel vehicleType;
 
     /**
-     * Records the timestamp of when the positioning information was initially created, serving as an audit trail.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
-    /**
-     * Captures the timestamp of the last update to the positioning record, facilitating tracking of changes over time.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt;

@@ -16,17 +16,29 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Table(name = "tire_change_history")
 public class TireChangeHistoryModel {
+    /**
+     * Identifier code that auto-increments with the creation of a record.
+     */
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Details associated with the tire change history
+     */
     private String details;
 
+    /**
+     * Company associated with the tire change history
+     */
     @ManyToOne
     @JoinColumn(name = "company", nullable = true)
     private CompanyModel companyModel;
 
+    /**
+     * Vehicle associated with the tire change history
+     */
     @ManyToOne
     @JoinColumn(name = "vehicle", nullable = true)
     private VehicleModel vehicleModel;

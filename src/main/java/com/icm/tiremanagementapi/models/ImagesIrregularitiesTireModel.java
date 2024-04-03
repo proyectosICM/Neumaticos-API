@@ -11,10 +11,6 @@ import javax.validation.constraints.Size;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * This model is associated with tire irregularities and is used to add images and context
- * that can assist in resolving or provide proof for the resolution of the irregularity.
- */
 @Entity
 @Data
 @AllArgsConstructor

@@ -10,12 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-/**
- * Represents a tire for a vehicle within the system.
- * Encapsulates data related to individual tires, including their identification, status,
- * and physical properties such as temperature and pressure. This class plays a key role
- * in monitoring tire conditions and managing alerts for anomalies.
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -30,36 +24,47 @@ public class TireModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * codname for tire
+     */
     private String codname;
 
+    /**
+     * Tire Status (FREE, IN_USE, DAMAGED)
+     */
     @Enumerated(EnumType.STRING)
     private TireStatus status;
 
+    /**
+     * Position associated with the tire
+     */
     @ManyToOne
     @JoinColumn(name = "positioning", nullable = true)
     private PositioningModel positioningModel;
 
     /**
-     * Links this tire to a specific vehicle within the system, enabling association between tires and vehicles.
+     * Vehicle associated with the tire
      */
     @ManyToOne
     @JoinColumn(name = "vehicle", nullable = true)
     private VehicleModel vehicleModel;
 
+    /**
+     * Company associated with the tire
+     */
     @ManyToOne
     @JoinColumn(name = "company", nullable = true)
     private CompanyModel companyModel;
 
     /**
-     * Records the creation timestamp of the tire record, providing audit capabilities.
+     * Timestamps for recording the creation and last update times of the record.
+     * - 'createdAt' is set at the time of creation and is not updatable.
+     * - 'updatedAt' is set at the time of creation and updated on every modification to the record.
      */
     @Column(name = "createdat", nullable = false, updatable = false)
     @CreationTimestamp
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Lima"));
 
-    /**
-     * Records the last update timestamp of the tire record, facilitating tracking of changes over time.
-     */
     @Column(name = "updatedAt")
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Lima"));

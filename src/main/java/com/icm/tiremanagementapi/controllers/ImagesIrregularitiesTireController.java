@@ -22,37 +22,35 @@ public class ImagesIrregularitiesTireController {
     private ImagesIrregularitiesTireService imagesIrregularitiesTireService;
 
     @Autowired
-    private IrregularitiesTireService irregularitiesTireService;
-
-    @Autowired
     private CompanyService companyService;
 
-    @GetMapping
-    public List<ImagesIrregularitiesTireModel> getAllImages() {
-        return imagesIrregularitiesTireService.getAllImages();
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<ImagesIrregularitiesTireModel> getImagesById(@PathVariable Long id) {
-        Optional<ImagesIrregularitiesTireModel> data = imagesIrregularitiesTireService.getImageById(id);
-        return data.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ImagesIrregularitiesTireModel> findById(@PathVariable Long id) {
+        Optional<ImagesIrregularitiesTireModel> data = imagesIrregularitiesTireService.findById(id);
+        return data.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/name")
-    public ResponseEntity<ImagesIrregularitiesTireModel> getImageByImageName(@RequestParam String imageName, @RequestParam Long irregularityId) {
-        ImagesIrregularitiesTireModel image = imagesIrregularitiesTireService.getImageByImageName(imageName,irregularityId);
-        return ResponseEntity.ok(image);
+    @GetMapping
+    public List<ImagesIrregularitiesTireModel> findAll() {
+        return imagesIrregularitiesTireService.findAll();
     }
 
     @GetMapping("/byIrregularities/{id}")
-    public ResponseEntity<List<ImagesIrregularitiesTireModel>> getByIrregularities(@PathVariable Long id) {
-        List<ImagesIrregularitiesTireModel> images = imagesIrregularitiesTireService.getByIrregularityId(id);
+    public ResponseEntity<List<ImagesIrregularitiesTireModel>> findByIrregularitiesTireModelId(@PathVariable Long id) {
+        List<ImagesIrregularitiesTireModel> images = imagesIrregularitiesTireService.findByIrregularitiesTireModelId(id);
         if (images.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
+
+    @GetMapping("/name")
+    public ResponseEntity<ImagesIrregularitiesTireModel> getImageByImageName(@RequestParam String imageName,
+                                                                             @RequestParam Long irregularityId) {
+        ImagesIrregularitiesTireModel image = imagesIrregularitiesTireService.findByImageNameAndIrregularitiesTireModelId(imageName, irregularityId);
+        return ResponseEntity.ok(image);
+    }
+
 
     @PostMapping
     public ResponseEntity<ImagesIrregularitiesTireModel> saveImage(
@@ -61,14 +59,12 @@ public class ImagesIrregularitiesTireController {
             @RequestParam("details") String details,
             @RequestParam("file") MultipartFile file) {
 
-        // Construir aquí el objeto ImagesIrregularitiesTireModel a partir de los parámetros recibidos
         ImagesIrregularitiesTireModel image = new ImagesIrregularitiesTireModel();
-        // Suponiendo que tienes los setters adecuados
 
         IrregularitiesTireModel irregularitiesTire = new IrregularitiesTireModel();
         irregularitiesTire.setId(irregularitiesTireModelId);
-        Optional<CompanyModel> company = companyService.getById(companyModelId);
-        // company.setId(companyModelId);
+        Optional<CompanyModel> company = companyService.findById(companyModelId);
+
         CompanyModel com = new CompanyModel();
         com.setId(companyModelId);
         com.setName(company.get().getName());
@@ -85,10 +81,8 @@ public class ImagesIrregularitiesTireController {
         }
     }
 
-
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<ImagesIrregularitiesTireModel> deleteImage(@PathVariable Long id){
+    public ResponseEntity<ImagesIrregularitiesTireModel> deleteImage(@PathVariable Long id) {
         imagesIrregularitiesTireService.deleteImage(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

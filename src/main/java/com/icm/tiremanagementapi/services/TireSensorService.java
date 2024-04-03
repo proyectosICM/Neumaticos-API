@@ -49,81 +49,35 @@ public class TireSensorService {
     @Value("${file.image}")
     private String basePath;
 
-    /**
-     * Retrieves a list of all tires in the system.
-     *
-     * @return List of TireModel objects.
-     */
     public List<TireSensorModel> getAll() {
         return tireSensorRepository.findAll();
     }
     public List<TireSensorModel> findByCompanyModelIdAndStatus(Long companyId, Boolean status) {
         return tireSensorRepository.findByCompanyModelIdAndStatus(companyId, status);
     }
-    /**
-     * Retrieves a specific tire by its ID.
-     *
-     * @param id The ID of the tire to retrieve.
-     * @return Optional containing the TireModel if found, otherwise empty.
-     */
+
     public Optional<TireSensorModel> getById(Long id) {
         return tireSensorRepository.findById(id);
     }
 
-    /**
-     * Retrieves a specific tire by its identification code.
-     *
-     * @param code The identification code of the tire to retrieve.
-     * @return Optional containing the TireModel if found, otherwise empty.
-     */
     public Optional<TireSensorModel> findByIdentificationCode(String code) {
         return tireSensorRepository.findByIdentificationCode(code);
     }
 
-    /**
-     * Retrieves a list of all tires associated with a specific vehicle.
-     * This method is designed to fetch a comprehensive list without pagination,
-     * suitable for scenarios where the complete set of associated tires is required.
-     *
-     * @param vehicleId The ID of the vehicle for which to retrieve the associated tires.
-     * @return List of TireModel objects associated with the specified vehicle ID.
-     */
     public List<TireSensorModel> findTiresByVehicleId(Long vehicleId) {
         List<TireSensorModel> tires = tireSensorRepository.findByVehicleModelId(vehicleId);
         tires.sort(Comparator.comparing(tire -> tire.getPositioning().getId()));
         return tires;
     }
 
-    /**
-     * Retrieves a list of tires associated with a specific vehicle using pagination.
-     *
-     * @param vehicle  The vehicle for which to retrieve tires.
-     * @param pageable  The pageable information for pagination.
-     * @return Page of TireModel objects associated with the specified vehicle.
-     */
     public Page<TireSensorModel> findByVehicleModelId(Long vehicle, Pageable pageable) {
         return tireSensorRepository.findByVehicleModelId(vehicle, pageable);
     }
 
-    /**
-     * Finds all tires related to a specific vehicle and positioned at a specified location code.
-     * Useful for retrieving tires based on their physical location on a vehicle.
-     * @param vehicle The ID of the vehicle for which to find tires.
-     * @param positioning The positioning code of the tire on the vehicle.
-     * @return A list of TireModel objects associated with the given vehicle and positioning code.
-     */
     public List<TireSensorModel> findTiresByVehicleAndPositioning(Long vehicle, String positioning) {
         return tireSensorRepository.findByVehicleModelIdAndPositioningLocationCode(vehicle, positioning);
     }
 
-    /**
-     * Retrieves a paginated list of tires associated with a specific vehicle and status.
-     *
-     * @param vehicleId The ID of the vehicle for which to retrieve tires.
-     * @param status    The status of the tires to filter.
-     * @param pageable  The pageable information for pagination.
-     * @return Page of TireModel objects associated with the specified vehicle and status.
-     */
     public Page<TireSensorModel> findByVehicleModelIdAndStatus(Long vehicleId, Boolean status, Pageable pageable) {
         return tireSensorRepository.findByVehicleModelIdAndStatus(vehicleId, status, pageable);
     }
@@ -140,22 +94,10 @@ public class TireSensorService {
         return tireSensorRepository.findByIdAndCompanyModelIdAndStatus(id, companyModelId, false);
     }
 
-    /**
-     * Creates a new tire record in the system.
-     *
-     * @param tireSensorModel The TireModel object representing the new tire.
-     * @return The created TireModel.
-     */
     public TireSensorModel createTire(TireSensorModel tireSensorModel) {
         return tireSensorRepository.save(tireSensorModel);
     }
 
-    /**
-     * Updates an existing tire record in the system.
-     *
-     * @param id   The ID of the tire to update.
-     * @return The updated TireModel if the tire with the given ID is found, otherwise null.
-     */
     public TireSensorModel updateTireSensor(TireSensorModel tireSensor, Long id) {
         // Verificar si el sensor a actualizar existe
         TireSensorModel existingTireSensor = tireSensorRepository.findById(id)
@@ -185,9 +127,6 @@ public class TireSensorService {
         return tireSensorRepository.save(existingTireSensor);
     }
 
-    /**
-     * Cambio de Neumaticos
-     */
     public TireSensorModel changeSensor(Long id1, Long id2, String pos, Long v){
         Optional<TireSensorModel> result1 = tireSensorRepository.findById(id1).map(
                 n1 -> {
@@ -215,11 +154,6 @@ public class TireSensorService {
         }
     }
 
-    /**
-     * Deletes a tire record from the system by its ID.
-     *
-     * @param id The ID of the tire to delete.
-     */
     public void deleteTire(Long id) {
         tireSensorRepository.deleteById(id);
     }
@@ -330,7 +264,7 @@ public class TireSensorService {
 
 
 
-        ResponseEntity<List<String>> response = userController.getEmailsByCompanyAndRole(
+        ResponseEntity<List<String>> response = userController.findByCompanyIdAndRoleIdIn(
                 irregularity.getCompany().getId(), 3L, 4L);
 
         // Crear un objeto EmailDTO con la información necesaria

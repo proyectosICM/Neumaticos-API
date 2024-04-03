@@ -13,12 +13,12 @@ public class TireChangeHistoryService {
     @Autowired
     private TireChangeHistoryRepository tireChangeHistoryRepository;
 
-    public List<TireChangeHistoryModel> getAll() {
-        return tireChangeHistoryRepository.findAll();
+    public Optional<TireChangeHistoryModel> findById(Long id) {
+        return tireChangeHistoryRepository.findById(id);
     }
 
-    public Optional<TireChangeHistoryModel> getById(Long id) {
-        return tireChangeHistoryRepository.findById(id);
+    public List<TireChangeHistoryModel> findAll() {
+        return tireChangeHistoryRepository.findAll();
     }
 
     public TireChangeHistoryModel save(Long vehicleId, Long companyId, Integer type, String cod1, String cod2) {
