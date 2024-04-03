@@ -143,6 +143,22 @@ public class TireSensorController {
         return new ResponseEntity<>(tires, HttpStatus.OK);
     }
 
+    @GetMapping("/findByVehicleModelIdAndPositioningId")
+    public ResponseEntity<TireSensorModel> findByVehicleModelIdAndPositioningId(@RequestParam Long vehicleId, @RequestParam Long positioning) {
+        Optional<TireSensorModel> tireSensor = tireSensorService.findByVehicleModelIdAndPositioningId(vehicleId, positioning);
+        return tireSensor.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<TireSensorModel> findByIdAndCompanyModelId(
+            @RequestParam Long id,
+            @RequestParam Long companyModelId) {
+        Optional<TireSensorModel> tireSensor = tireSensorService.findByIdAndCompanyModelId(id, companyModelId);
+        return tireSensor.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     /**
      * Creates a new tire record in the system.
      *

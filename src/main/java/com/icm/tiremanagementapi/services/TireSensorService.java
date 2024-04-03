@@ -132,6 +132,14 @@ public class TireSensorService {
         return tireSensorRepository.findByCompanyModelId(companyId, pageable);
     }
 
+    public Optional<TireSensorModel> findByVehicleModelIdAndPositioningId(Long vehicleModelId, Long positioningId) {
+        return tireSensorRepository.findByVehicleModelIdAndPositioningId(vehicleModelId, positioningId);
+    }
+
+    public Optional<TireSensorModel> findByIdAndCompanyModelId(Long id, Long companyModelId) {
+        return tireSensorRepository.findByIdAndCompanyModelIdAndStatus(id, companyModelId, false);
+    }
+
     /**
      * Creates a new tire record in the system.
      *
@@ -157,7 +165,6 @@ public class TireSensorService {
         if (tireSensor.getVehicleModel() != null && tireSensor.getPositioning() != null) {
             Optional<TireSensorModel> oldTireSensor = tireSensorRepository.findByVehicleModelIdAndPositioningId(
                     tireSensor.getVehicleModel().getId(), tireSensor.getPositioning().getId());
-
             if (oldTireSensor.isPresent()) {
                 // Liberar el sensor anterior
                 TireSensorModel sensorToFree = oldTireSensor.get();
