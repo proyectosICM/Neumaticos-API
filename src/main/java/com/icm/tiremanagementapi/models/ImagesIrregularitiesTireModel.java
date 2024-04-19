@@ -17,36 +17,21 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Table(name = "irregularities_tire_images")
 public class ImagesIrregularitiesTireModel {
-    /**
-     * Identifier code that auto-increments with the creation of a record.
-     */
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Name of the image in the directory.
-     */
     @Size(max = 50, message = "Name cannot exceed 50 characters")
     private String imageName;
 
-    /**
-     * Detail that provides an explanation of the problem or event depicted in the image
-     */
     @Size(max = 550, message = "Name cannot exceed 550 characters")
     private String details;
 
-    /**
-     * Irregularity associated with the image
-     */
     @ManyToOne
     @JoinColumn(name = "irregularities", nullable = true)
     private IrregularitiesTireModel irregularitiesTireModel;
 
-    /**
-     * Company associated with the image
-     */
     @ManyToOne
     @JoinColumn(name = "company", nullable = true)
     private CompanyModel companyModel;

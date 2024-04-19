@@ -18,9 +18,6 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Table(name = "performance_tire")
 public class PerformanceTireModel {
-    /**
-     * Identifier code that auto-increments with the creation of a record.
-     */
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,24 +46,14 @@ public class PerformanceTireModel {
     @DecimalMax(value = "100.0", inclusive = true, message = "Battery level must be less than or equal to 100")
     private Double batteryLevel;
 
-    /**
-     * Links this performance to a specific vehicle within the system, enabling association between tires and vehicles.
-     */
     @ManyToOne
     @JoinColumn(name = "vehicle", nullable = true)
     private VehicleModel vehicleModel;
 
-    /**
-     * Associates the performance with a company, reflecting ownership or responsibility for maintenance.
-     */
     @ManyToOne
     @JoinColumn(name = "company", nullable = false)
     private CompanyModel companyModel;
 
-    /**
-     * Reference to the tire experiencing the performance.
-     * This direct association is crucial for pinpointing the specific tire involved in the performance.
-     */
     @ManyToOne
     @JoinColumn(name = "sensor", nullable = false)
     private TireSensorModel tireSensorModel;

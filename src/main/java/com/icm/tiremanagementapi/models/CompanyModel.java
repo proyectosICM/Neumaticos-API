@@ -17,23 +17,14 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Table(name = "company")
 public class CompanyModel {
-    /**
-     * Identifier code that auto-increments with the creation of a record.
-     */
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * The name of the company used for identification and display purposes throughout the application
-     */
     @Size(max = 255, message = "Name cannot exceed 255 characters")
     private String name;
 
-    /**
-     * Indicates if the company is active or inactive for display and filtering purposes.
-     */
     private Boolean status;
 
     /**
