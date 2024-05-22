@@ -158,14 +158,12 @@ public class TireSensorService {
         tireSensorRepository.deleteById(id);
     }
 
-    public TireSensorModel updateProperties(Double temperature, Double pressure, Integer battery, Long idvehicle, Long idtire) {
-        VehicleModel vehicle = vehicleRepository.findById(idvehicle)
-                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+    public TireSensorModel updateProperties(Double temperature, Double pressure, Integer battery, Long idtire) {
         TireSensorModel sensor = tireSensorRepository.findById(idtire)
                 .orElseThrow(() -> new RuntimeException("Neumático no encontrado"));
 
         // Ejecuta las verificaciones consolidadas y decide sobre la creación de irregularidades
-        CheckResult checkResult = checkAllConditions(temperature, pressure, battery, vehicle, sensor);
+        CheckResult checkResult = checkAllConditions(temperature, pressure, battery, sensor.getVehicleModel(), sensor);
         if (checkResult.isShouldCreateIrregularity()) {
             createIrregularity(checkResult, sensor);
         }
@@ -178,6 +176,7 @@ public class TireSensorService {
         // Guarda el neumático actualizado en la base de datos
         return tireSensorRepository.save(sensor);
     }
+
 
 
     private CheckResult checkAllConditions(Double temperature, Double pressure, Integer battery, VehicleModel vehicle, TireSensorModel tire) {
@@ -253,7 +252,7 @@ public class TireSensorService {
         // Crear el directorio
         File directory = new File(directoryPath);
         boolean isDirectoryCreated = directory.mkdirs();
-        sendEmailForIrregularity(irregularity);
+        //sendEmailForIrregularity(irregularity);
     }
 
     private void sendEmailForIrregularity(IrregularitiesTireModel irregularity) {

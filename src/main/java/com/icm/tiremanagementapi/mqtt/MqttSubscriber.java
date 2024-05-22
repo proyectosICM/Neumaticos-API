@@ -44,10 +44,10 @@ public class MqttSubscriber {
                     try {
                         TireSensorModel tireModel = objectMapper.readValue(payload, TireSensorModel.class);
                         // Extract necessary properties from the TireModel object
-                        Long idvehicle = tireModel.getVehicleModel().getId();
+                        // Long idvehicle = tireModel.getVehicleModel().getId();
                         Long idtire = tireModel.getId();
                         // Update tire properties based on the received message
-                        tireSensorService.updateProperties(tireModel.getTemperature(), tireModel.getPressure(), tireModel.getBatteryLevel().intValue(), idvehicle, idtire);
+                        tireSensorService.updateProperties(tireModel.getTemperature(), tireModel.getPressure(), tireModel.getBatteryLevel().intValue(), idtire);
                     } catch (JsonProcessingException e) {
                         // Handle JSON parsing errors
                         System.err.println("Error al deserializar el JSON: " + e.getMessage());

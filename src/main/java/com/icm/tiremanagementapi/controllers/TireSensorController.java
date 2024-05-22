@@ -219,7 +219,6 @@ public class TireSensorController {
                     request.getTemperature(),
                     request.getPressure(),
                     request.getBattery(),
-                    request.getIdvehicle(),
                     request.getIdtire()
             );
             return ResponseEntity.ok(updatedTire);
