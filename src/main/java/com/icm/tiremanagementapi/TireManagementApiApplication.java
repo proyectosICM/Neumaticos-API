@@ -5,15 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-/**
- * Main class for the Tire Management API application, incorporating MQTT functionality.
- * Serves as the entry point for the Spring Boot application, setting up the application context.
- * It initializes necessary components, including MQTT message handling,
- * by subscribing to topics and processing incoming messages.
- * This setup demonstrates the integration of MQTT communication within a Spring Boot application,
- * facilitating real-time data exchange with IoT devices or other MQTT-enabled systems.
- */
-
 @SpringBootApplication
 public class TireManagementApiApplication {
 
