@@ -28,4 +28,5 @@ public class GasChangeModel {
     @ManyToOne
     @JoinColumn(name = "vehicle", referencedColumnName = "id", nullable = false)
     private VehicleModel vehicleModel;
+
 }
