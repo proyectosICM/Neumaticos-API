@@ -1,15 +1,22 @@
 package com.icm.tiremanagementapi.services;
 
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordDailyAveragesDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordHourlyAverageDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordMonthlyAveragesDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordYearlyAveragesDTO;
 import com.icm.tiremanagementapi.models.GasRecordModel;
 import com.icm.tiremanagementapi.repositories.GasRecordRepository;
+import com.icm.tiremanagementapi.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GasRecordService {
@@ -39,20 +46,40 @@ public class GasRecordService {
     /**
      * Methods for statistics
      */
-    public List<Object[]> getHourlyAveragesByVehicleIdAndDay(Long vehicleId, LocalDate day) {
-        return gasRecordRepository.findHourlyAveragesByVehicleIdAndDay(vehicleId, day);
+    public List<GasRecordHourlyAverageDTO> getHourlyAveragesByVehicleIdAndDay(Long vehicleId, LocalDate day) {
+        List<Object[]> results = gasRecordRepository.findHourlyAveragesByVehicleIdAndDay(vehicleId, day);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        return results.stream()
+                .map(result -> new GasRecordHourlyAverageDTO(result[0].toString() + ":00", (Double) result[1]))
+                .collect(Collectors.toList());
     }
 
-    public List<Object[]> getDailyAveragesByVehicleIdAndMonth(Long vehicleId, int year, int month) {
-        return gasRecordRepository.findDailyAveragesByVehicleIdAndMonth(vehicleId, year, month);
+    public List<GasRecordDailyAveragesDTO> getDailyAveragesByVehicleIdAndMonth(Long vehicleId, int year, int month) {
+        List<Object[]> results = gasRecordRepository.findDailyAveragesByVehicleIdAndMonth(vehicleId, year, month);
+        return results.stream()
+                .map(result -> new GasRecordDailyAveragesDTO(result[0].toString(), (Double) result[1]))
+                .collect(Collectors.toList());
     }
 
-    public List<Object[]> getMonthlyAveragesByVehicleIdAndYear(Long vehicleId, int year) {
-        return gasRecordRepository.findMonthlyAveragesByVehicleIdAndYear(vehicleId, year);
+    public List<GasRecordMonthlyAveragesDTO> getMonthlyAveragesByVehicleIdAndYear(Long vehicleId, int year) {
+        List<Object[]> results = gasRecordRepository.findMonthlyAveragesByVehicleIdAndYear(vehicleId, year);
+        return results.stream()
+                .map(result -> new GasRecordMonthlyAveragesDTO(
+                        DateUtils.getMonthName((Integer) result[0]),
+                        (Double) result[1]
+                ))
+                .collect(Collectors.toList());
     }
 
-    public List<Object[]> getYearlyAveragesByVehicleId(Long vehicleId) {
-        return gasRecordRepository.findYearlyAveragesByVehicleId(vehicleId);
+    public List<GasRecordYearlyAveragesDTO> getYearlyAveragesByVehicleId(Long vehicleId) {
+        List<Object[]> results = gasRecordRepository.findYearlyAveragesByVehicleId(vehicleId);
+        return results.stream()
+                .map(result -> new GasRecordYearlyAveragesDTO(
+                        result[0].toString(),
+                        (Double) result[1]
+                ))
+                .collect(Collectors.toList());
     }
 
 }

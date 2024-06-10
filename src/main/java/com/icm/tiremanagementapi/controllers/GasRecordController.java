@@ -1,5 +1,9 @@
 package com.icm.tiremanagementapi.controllers;
 
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordDailyAveragesDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordHourlyAverageDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordMonthlyAveragesDTO;
+import com.icm.tiremanagementapi.dto.GasDTO.GasRecordYearlyAveragesDTO;
 import com.icm.tiremanagementapi.models.GasChangeModel;
 import com.icm.tiremanagementapi.models.GasRecordModel;
 import com.icm.tiremanagementapi.services.GasRecordService;
@@ -58,30 +62,31 @@ public class GasRecordController {
 
 
     @GetMapping("/hourly-averages")
-    public List<Object[]> getHourlyAverages(
+    public List<GasRecordHourlyAverageDTO> getHourlyAverages(
             @RequestParam Long vehicleId) {
-        // Obtener la fecha actual en la zona horaria de Perú
         LocalDate currentDateInPeru = LocalDate.now(ZoneId.of("America/Lima"));
         return gasRecordService.getHourlyAveragesByVehicleIdAndDay(vehicleId, currentDateInPeru);
     }
 
     @GetMapping("/daily-averages")
-    public List<Object[]> getDailyAverages(
-            @RequestParam Long vehicleId,
-            @RequestParam int year,
-            @RequestParam int month) {
-        return gasRecordService.getDailyAveragesByVehicleIdAndMonth(vehicleId, year, month);
+    public List<GasRecordDailyAveragesDTO> getDailyAverages(@RequestParam Long vehicleId) {
+        LocalDate currentDateInPeru = LocalDate.now(ZoneId.of("America/Lima"));
+        int currentYear = currentDateInPeru.getYear();
+        int currentMonth = currentDateInPeru.getMonthValue();
+
+        return gasRecordService.getDailyAveragesByVehicleIdAndMonth(vehicleId, currentYear, currentMonth);
     }
 
     @GetMapping("/monthly-averages")
-    public List<Object[]> getMonthlyAverages(
-            @RequestParam Long vehicleId,
-            @RequestParam int year) {
-        return gasRecordService.getMonthlyAveragesByVehicleIdAndYear(vehicleId, year);
+    public List<GasRecordMonthlyAveragesDTO> getMonthlyAverages(@RequestParam Long vehicleId) {
+        // Obtener el año actual en la zona horaria de Perú
+        int currentYear = LocalDate.now(ZoneId.of("America/Lima")).getYear();
+        return gasRecordService.getMonthlyAveragesByVehicleIdAndYear(vehicleId, currentYear);
     }
 
+
     @GetMapping("/yearly-averages")
-    public List<Object[]> getYearlyAverages(
+    public List<GasRecordYearlyAveragesDTO> getYearlyAverages(
             @RequestParam Long vehicleId) {
         return gasRecordService.getYearlyAveragesByVehicleId(vehicleId);
     }
