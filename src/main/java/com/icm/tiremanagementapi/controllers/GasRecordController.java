@@ -7,13 +7,21 @@ import com.icm.tiremanagementapi.dto.GasDTO.GasRecordYearlyAveragesDTO;
 import com.icm.tiremanagementapi.models.GasChangeModel;
 import com.icm.tiremanagementapi.models.GasRecordModel;
 import com.icm.tiremanagementapi.services.GasRecordService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -89,6 +97,43 @@ public class GasRecordController {
     public List<GasRecordYearlyAveragesDTO> getYearlyAverages(
             @RequestParam Long vehicleId) {
         return gasRecordService.getYearlyAveragesByVehicleId(vehicleId);
+    }
+
+    /**
+     * Excels
+     * */
+    @GetMapping("/export/{vehicleId}")
+    public ResponseEntity<byte[]> exportGasRecords(@PathVariable Long vehicleId) throws IOException {
+        List<GasRecordModel> gasRecords = gasRecordService.getByVehicleModelId(vehicleId);
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Gas Records");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Día de registro");
+        headerRow.createCell(1).setCellValue("Hora de registro");
+        headerRow.createCell(2).setCellValue("Presión");
+        headerRow.createCell(3).setCellValue("Placa del vehiculo");
+
+        // Fill data rows
+        int rowNum = 1;
+        for (GasRecordModel gasRecord : gasRecords) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(gasRecord.getDay().toString());
+            row.createCell(1).setCellValue(gasRecord.getHour().toString());
+            row.createCell(2).setCellValue(gasRecord.getPressure());
+            row.createCell(3).setCellValue(gasRecord.getVehicleModel().getPlaca());
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        workbook.close();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=gas_records.xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(baos.toByteArray());
     }
 
 }
