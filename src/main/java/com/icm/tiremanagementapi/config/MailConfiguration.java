@@ -10,6 +10,7 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfiguration {
+
     @Value("${email.sender}")
     private String emailUser;
 
